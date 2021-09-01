@@ -19,7 +19,7 @@ void Circle::draw(void)
 static int number_vertices(double P, double r)
 {
     double D = P / 2;
-    double n = 180 / (cos(1 - D / r));
+    double n = 180 / (acos(1 - D / r));
     return ceil(n);
 }
 
