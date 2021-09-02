@@ -16,11 +16,14 @@ void Circle::draw(void)
 }
 
 
+// Calculates the number of vertices for a tesselated poly line circle based on:
+// P: Screen resolution in NDC coordinates per pixel
+// r: circle radius
 static int number_vertices(double P, double r)
 {
     double D = P / 2;
-    double n = 180 / (acos(1 - D / r));
-    return ceil(n);
+    double n = M_PI / (std::acos(1 - D / r));
+    return std::ceil(n);
 }
 
 
@@ -42,29 +45,17 @@ void Circle::tessellate(void)
     //
     // 19 lines in instructor solution (YMMV)
     //
-    
-    // Point2 vertexPositions[4] = {
-    //     Point2(-0.5, -0.5),
-    //     Point2( 0.5, -0.5),
-    //     Point2( 0.5,  0.5),
-    //     Point2(-0.5,  0.5),
-    // };
-
-    // tessellationPolyLine = new PolyLine(vertexPositions,
-    //                                     N_ELEM(vertexPositions), true);
 
     const double P = 0.00119; // Screen resolution - NDC coordinates per pixel
-
     int n = number_vertices(P, radius);
 
     std::vector<Point2> vertices;
     for (int i = 0; i < n; i++)
     {
-        double theta = 180 / static_cast<double>(n);
-        double x = radius * sin(theta) + center.g.x;
-        double y = radius * cos(theta) + center.g.y;
+        double theta = (2 * M_PI / n) * i; // radians
+        double x = radius * std::sin(theta) + center.g.x;
+        double y = radius * std::cos(theta) + center.g.y;
         vertices.push_back(Point2(x, y));
     }
-
     tessellationPolyLine = new PolyLine(vertices.data(), vertices.size(), true);
 }
