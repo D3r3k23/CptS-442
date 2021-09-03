@@ -1,0 +1,80 @@
+%PDF-1.4
+%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+1 0 obj
+<< /F1 2 0 R /F2 3 0 R /F3 4 0 R >>
+endobj
+2 0 obj
+<< /BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font >>
+endobj
+3 0 obj
+<< /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font >>
+endobj
+4 0 obj
+<< /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font >>
+endobj
+5 0 obj
+<< /Contents 9 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 8 0 R /Resources << /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] >> /Rotate 0 /Trans <<  >> 
+  /Type /Page >>
+endobj
+6 0 obj
+<< /Outlines 10 0 R /PageLabels 11 0 R /PageMode /UseNone /Pages 8 0 R /Type /Catalog >>
+endobj
+7 0 obj
+<< /Author () /CreationDate (D:20151002173613+08'00') /Creator (\(unspecified\)) /Keywords () /Producer (ReportLab PDF Library - www.reportlab.com) /Subject (\(unspecified\)) 
+  /Title (pa02_wire_track: Making OpenGL Draw a Rollercoaster Track in 3D) >>
+endobj
+8 0 obj
+<< /Count 1 /Kids [ 5 0 R ] /Type /Pages >>
+endobj
+9 0 obj
+<< /Length 597 >>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 62.69291 717.0236 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 28 Tm /F2 20 Tf 24 TL 38.76488 0 Td (pa02_wire_track: Making OpenGL Draw a) Tj T* 75.58 0 Td (Rollercoaster Track in 3D) Tj T* -114.3449 0 Td ET
+Q
+Q
+q
+1 0 0 1 62.69291 683.0236 cm
+q
+BT 1 0 0 1 0 14 Tm .472927 Tw 12 TL /F1 10 Tf 0 0 0 rg (In this programming assignment, you will start to build the ) Tj /F3 10 Tf (coaster ) Tj /F1 10 Tf (application in earnest, with a 3D curve) Tj T* 0 Tw (indicating the path the rails will follow and vertical lines indicating curves.) Tj T* ET
+Q
+Q
+ 
+endstream
+endobj
+10 0 obj
+<< /Count 0 /Type /Outlines >>
+endobj
+11 0 obj
+<< /Nums [ 0 12 0 R ] >>
+endobj
+12 0 obj
+<< /S /D /St 1 >>
+endobj
+xref
+0 13
+0000000000 65535 f
+0000000075 00000 n
+0000000129 00000 n
+0000000239 00000 n
+0000000354 00000 n
+0000000472 00000 n
+0000000679 00000 n
+0000000786 00000 n
+0000001059 00000 n
+0000001121 00000 n
+0000001773 00000 n
+0000001823 00000 n
+0000001867 00000 n
+trailer
+<< /ID 
+ % ReportLab generated PDF document -- digest (http://www.reportlab.com)
+ [(Vy\334\326\362_Ie\(}\376[\315\225\246D) (Vy\334\326\362_Ie\(}\376[\315\225\246D)]
+ /Info 7 0 R /Root 6 0 R /Size 13 >>
+startxref
+1904
+%%EOF
