@@ -86,7 +86,7 @@ void TrigonometricCurve::tessellate(void)
     {
         double u = (double)i / nI;
         Point3 point = (*this)(u);
-        
+
         vertices.push_back(point);
     }
     tessellationPolyLine = new PolyLine(vertices.data(), nI, true);
