@@ -70,7 +70,7 @@ Scene::Scene(void)
     // Delete the next line (which keeps the unmodified template from
     // crashing).
     //
-    constantColorShaderProgram = NULL;
+    // constantColorShaderProgram = NULL;
 
     //
     // ASSIGNMENT (PA02)
@@ -83,5 +83,6 @@ Scene::Scene(void)
     //
     // 3 lines in instructor solution (YMMV)
     //
+    addSceneObject(new Track);
 }
 

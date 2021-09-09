@@ -1,6 +1,7 @@
 //
 // This file will deal with all single-parametric curves.
 //
+#include <vector>
 
 #include "curve.h"
 #include "geometry.h"
@@ -30,6 +31,9 @@ void TrigonometricCurve::draw(const Transform &viewTransform)
     //
     // 3 lines in instructor solution (YMMV)
     //
+    if (!tessellationPolyLine)
+        tessellate();
+    tessellationPolyLine->render(viewTransform);
 }
 
 
@@ -54,7 +58,8 @@ const Point3 TrigonometricCurve::operator()(const double u) const
     //
     // 5 lines in instructor solution (YMMV)
     //
-    return Point3(); // replace (permits template to compile cleanly)
+    Vec3 angle = 2 * M_PI * (freq * u + phase);
+    return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
 }
 
 
@@ -76,5 +81,14 @@ void TrigonometricCurve::tessellate(void)
     //
     // 9 lines in instructor solution (YMMV)
     //
+    std::vector<Point3> vertices;
+    for (int i = 0; i < nI; i++)
+    {
+        double u = (double)i / nI;
+        Point3 point = (*this)(u);
+        
+        vertices.push_back(point);
+    }
+    tessellationPolyLine = new PolyLine(vertices.data(), nI, true);
 }
 

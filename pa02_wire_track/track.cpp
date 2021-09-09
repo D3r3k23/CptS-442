@@ -80,5 +80,19 @@ Track::Track(void)
     //
     // 20 lines in instructor solution (YMMV)
     //
+    trackTrigonometricCurve = new TrigonometricCurve(mag, freq, phase, offset, nRailSegments);
+
+    Point3 supportLineVertexPositions[nSupports][2];
+
+    for (int i = 0; i < nSupports; i++)
+    {
+        double u = (double)i / nSupports;
+        Point3 point = (*trackTrigonometricCurve)(u);
+
+        supportLineVertexPositions[i][0] = Point3(point.g.x, point.g.y, 0.0); // Bottom
+        supportLineVertexPositions[i][1] = point; // Top
+    }
+
+    supportLines = new Lines(supportLineVertexPositions, nSupports);
 }
 
