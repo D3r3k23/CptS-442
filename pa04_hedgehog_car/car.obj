@@ -1,0 +1,115 @@
+# vertices
+v  0.0  -0.5  0.75
+v  0.0   0.5  0.75
+v  1.0  -0.75 1.0
+v  1.0   0.75 1.0
+v  4.5  -0.75 1.25  
+#  5
+v  4.5   0.75 1.25  
+v  5.0  -0.75 1.25  
+v  5.0   0.75 1.25  
+v  6.5  -0.25 0.75
+v  6.5   0.25 0.75
+# 10
+v  1.0  -0.5  1.0
+v  1.0   0.5  1.0
+v  1.5  -0.5  0.5
+v  1.5   0.5  0.5
+v  4.5  -0.5  0.5
+# 15
+v  4.5   0.5  0.5
+v  0.0  -0.5  0.5
+v  0.0   0.5  0.5
+v  1.0  -0.75 0.0
+v  1.0   0.75 0.0
+# 20
+v  5.0  -0.75 0.0
+v  5.0   0.75 0.0
+v  6.5  -0.25 0.5
+v  6.5   0.25 0.5
+v  4.5  -0.75 0.0
+# 25
+v  4.5   0.75 0.0
+v  4.5  -0.5 1.0
+v  4.5   0.5 1.0
+v  4.5  -0.75  1.0
+v  4.5   0.75  1.0
+# 30
+v  5.0   0.0   1.5  
+v  4.5   0.0   1.5  
+
+
+# faces (CCW defines "outside")
+# rear
+f  1 2 18 17
+
+# tail top
+f  1  3  4  2
+
+# tail left and right side
+f  1 17 19  3
+f  4 20 18  2
+
+# tail bottom
+f 17 18 20 19
+
+# mid right and left
+#f  3 19 25 27
+#f 28 26 20  4
+
+# mid seat back
+f 11 13 14 12
+
+# mid right and left inside
+f 13 11 27 15
+f 16 28 12 14
+
+# mid top left and right sides
+f  3 29 27 11
+f  4 12 28 30
+
+# mid right and left outside
+f  3 19 25 29
+f 30 26 20 4
+
+# mid bottom inside
+f 13 15 16 14
+
+# mid bottom outside
+# f 19 25 26 20
+f 20 26 25 19
+
+# front wall
+f  6 26 25 5 32
+
+# front top left
+f  6 32 31 8
+
+# front top right
+f 32 5  7 31
+
+# front right and left sides
+f  5 25 21 7
+f  6 8 22 26
+
+# front bottom
+f 21 25 26 22
+
+# tip top left
+f 8 31 10
+
+# tip top right
+f 31 7 9
+
+# tip top mid
+f 10 31 9
+
+# tip right and left sides
+f 7 21 23 9
+f 10 24 22 8
+
+# tip bottom
+f 23 21 22 24
+
+# tip front
+f 9 23 24 10

@@ -1,0 +1,28 @@
+# This is the default outline file for the car solid-of-rotation.
+
+# To avoid some confusing output, r must always be positive. z is
+# usually, but need not be, monotonically increasing.
+
+#  z     r
+-0.75, 0.00001
+-0.749, 0.02
+-0.74, 0.05
+-0.70, 0.11
+-0.60, 0.18
+-0.50, 0.20
+-0.40, 0.20
+-0.30, 0.20
+-0.20, 0.20
+-0.10, 0.20
+ 0.00, 0.20
+ 0.10, 0.20
+ 0.20, 0.20
+ 0.30, 0.20
+ 0.40, 0.20
+ 0.50, 0.20
+ 0.60, 0.18
+ 0.70, 0.11
+ 0.74, 0.05
+ 0.749, 0.02
+ 0.75, 0.00001
+
