@@ -286,13 +286,11 @@ public:
     //
     // Copy your previous (PA04) solution here.
     //
-
     const Vector3 cross(const Vector3 &other) const
     {
-        // replace the following (which permits the template to compile cleanly)
         return Vector3(
             g.y * other.g.z - g.z * other.g.y,
-            g.z * other.g.x - g.x - other.g.z,
+            g.z * other.g.x - g.x * other.g.z,
             g.x * other.g.y - g.y * other.g.x
         );
     };

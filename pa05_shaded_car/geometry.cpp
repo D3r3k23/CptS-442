@@ -19,7 +19,7 @@ Vector3 faceNormal(const Point3 &p0, const Point3 &p1, const Point3 &p2)
     //
     Vector3 e1 = p1 - p0;
     Vector3 e2 = p2 - p0;
-    return Vector3(e1.cross(e2)).normalized();
+    return e1.cross(e2).normalized();
 }
 
 
