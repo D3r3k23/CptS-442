@@ -49,6 +49,27 @@ void main(void)
     // object and does not come from a light.
     //
 
+    vec3 radiance = emittance;
+    vec3 worldNormal = normalize(normalMatrix * vertexNormal);
+
+    for (int i = 0; i < nLights; i++)
+    {
+        vec3 towardsLight = normalize(light[i].towards);
+        float nDotL = dot(worldNormal, towardsLight);
+
+        vec3 reflectivity = ambientReflectivity;
+        if (nDotL >= 0)
+        {
+            reflectivity += nDotL * maximumDiffuseReflectivity;
+            vec3 h = normalize(towardsCamera + towardsLight);
+            float nDotH = dot(worldNormal, h);
+
+            if (nDotH >= 0)
+                reflectivity += maximumSpecularReflectivity * pow(nDotH, specularExponent);
+        }
+        radiance += light[i].irradiance * reflectivity;
+    }
+
     interpolatedVertexColor = vec4(radiance, 1);
 #if 0 // debug
     interpolatedVertexColor = vec4(vertexNormal, 1);

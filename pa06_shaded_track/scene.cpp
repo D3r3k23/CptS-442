@@ -80,8 +80,8 @@ Scene::Scene(void)
     // Delete the next two lines (which keep the unmodified template
     // from crashing).
     //
-    constantColorShaderProgram = NULL;
-    eadsShaderProgram = NULL;
+    // constantColorShaderProgram = NULL;
+    // eadsShaderProgram = NULL;
 
     coordinateAxes = new CoordinateAxes();
 
@@ -105,5 +105,9 @@ Scene::Scene(void)
     //
     // 4 lines in instructor solution (YMMV)
     //
+    addSceneObject(new Track());
+
+    addLight(new Light(whiteColor, {0, 0, -1})); // Sun
+    addLight(new Light(whiteColor*0.5, {0, 1, 0})); // Searchlight
 }
 

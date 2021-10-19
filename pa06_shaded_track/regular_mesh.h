@@ -45,7 +45,7 @@ class RegularMesh : public Mesh
         //
         // 1 line in instructor solution (YMMV)
         //
-        return 0; // replace (permits template to compile cleanly)
+        return j * nI + i;
     };
 
 public:

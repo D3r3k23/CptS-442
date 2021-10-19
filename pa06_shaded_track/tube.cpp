@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 #include "curve.h"
@@ -29,8 +30,26 @@ void Tube::draw(SceneObject *sceneObject)
     //
     // 4 lines in instructor solution (YMMV)
     //
+    if (!tessellationMesh)
+    {
+        tessellate();
+        sceneObject->addHedgehogs(tessellationMesh);
+    }
+    tessellationMesh->render();
 }
 
+struct Frame
+{
+    static Curve* curve;
+
+    Point3 P;
+    Vector3 U, V, W;
+
+    Frame(double u)
+        { curve->coordinateFrame(u, P, U, V, W); }
+};
+
+Curve* Frame::curve = nullptr;
 
 void Tube::tessellate(void)
 {
@@ -62,5 +81,35 @@ void Tube::tessellate(void)
     //
     // 16 lines in instructor solution (YMMV)
     //
+    Frame::curve = curve;
+
+    std::vector<Point3>  vertexPositions;
+    std::vector<Vector3> vertexNormals;
+
+    double u = 0.0;
+    const double uStep = 1.0 / (isClosed ? nJ : nJ - 1);
+    for (int j = 0; j < nJ; j++, u += uStep)
+    {
+        assert(0.0 <= u && u <= 1.0);
+        Frame thisFrame(u);
+        Frame nextFrame(u + uStep);
+
+        double theta = 0.0;
+        const double thetaStep = 2.0 * M_PI / nI;
+        for (int i = 0; i < 2 * nI; i++)
+        {
+            Frame& frame = (i % 2 == 0) ? thisFrame : nextFrame;
+
+            Vector3 vertexNormal   = Vector3(frame.P.a) + (frame.U - Vector3(frame.P.a)) * cos(theta) + (frame.V - Vector3(frame.P.a)) * sin(theta);
+            Point3  vertexPosition = frame.P + radius * (vertexNormal - Vector3(frame.P.a));
+
+            vertexPositions.push_back(vertexPosition);
+            vertexNormals.push_back(vertexNormal);
+
+            if (1 % 2 != 0)
+                theta += thetaStep;
+        }
+    }
+    tessellationMesh = new RegularMesh(vertexPositions.data(), vertexNormals.data(), nI, nJ, true, isClosed);
 }
 

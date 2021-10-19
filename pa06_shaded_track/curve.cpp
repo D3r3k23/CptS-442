@@ -29,6 +29,11 @@ const void Curve::coordinateFrame(const double u,
     //
     // 8 lines in instructor solution (YMMV)
     //
+    p = (*this)(u, &vW);
+    vW = vW.normalized();
+
+    vU = vNeverParallel.cross(vW).normalized();
+    vV = vW.cross(vU);
 }
 
 
@@ -80,6 +85,12 @@ const Point3 TrigonometricCurve::operator()(const double u,
     //
     // 10 lines in instructor solution (YMMV)
     //
-    return Point3(); // replace (permits template to compile cleanly)
+    if (dp_du)
+    {
+        auto h = sqrt(EPSILON);
+        *dp_du = (*this)(u + h) - (*this)(u - h);
+    }
+    Vec3 angle = 2 * M_PI * (freq * u + phase);
+    return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.y)) * mag + offset;
 }
 

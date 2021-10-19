@@ -445,6 +445,13 @@ ConstantColorShaderProgram::ConstantColorShaderProgram(string name)
     //
     // Copy your previous (PA02) solution here.
     //
+    char* vertexShaderText = readFile("constant_color_vertex_shader.glsl");
+    compileVertexShader(vertexShaderText);
+    free(vertexShaderText);
+
+    char* fragmentShaderText = readFile("passthru_fragment_shader.glsl");
+    compileFragmentShader(fragmentShaderText);
+    free(fragmentShaderText);
 }
 
 
@@ -472,6 +479,13 @@ EadsShaderProgram::EadsShaderProgram(void)
     //
     // Copy your previous (PA05) solution here.
     //
+    char* vertexShaderText = readFile("eads_vertex_shader.glsl");
+    compileVertexShader(vertexShaderText);
+    free(vertexShaderText);
+
+    char* fragmentShaderText = readFile("passthru_fragment_shader.glsl");
+    compileFragmentShader(fragmentShaderText);
+    free(fragmentShaderText);
 }
 
 
@@ -534,6 +548,26 @@ const void EadsShaderProgram::start(void) const
     // Suggestion: Assert that there are no more than 10 lights (see
     // the shader source).
     //
+    int nLights = scene->lights.size();
+    assert(nLights <= 10);
+
+    setUniform("nLights", nLights);
+    for (int i = 0; i < nLights; i++)
+    {
+        auto irradianceUniformName = "light[" + std::to_string(i) + "].irradiance";
+        auto towardsUniformName    = "light[" + std::to_string(i) + "].towards";
+
+        if (controller.lightHedgehogIndex == LIGHT_HEDGEHOG_DISABLED || controller.lightHedgehogIndex == i)
+        {
+            setUniform(irradianceUniformName, scene->lights[i]->irradiance);
+            setUniform(towardsUniformName,    scene->lights[i]->towards());
+        }
+        else
+        {
+            setUniform(irradianceUniformName, blackColor);
+            setUniform(towardsUniformName, Vector3{0, 0, 0});
+        }
+    }
 }
 
 

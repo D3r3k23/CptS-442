@@ -85,6 +85,16 @@ void Track::addSupports(const double maxHeight)
     //
     // 15 lines in instructor solution (YMMV)
     //
+    double u = 0.0;
+    const double uStep = 1.0 / nSupports;
+    for (int i = 0; i < nSupports; i++, u += uStep)
+    {
+        Point3 point = (*guideCurve)(u);
+        auto supportLine = new LineSegment({point.g.x, point.g.y, 0.0}, point, {1.0, 0, 0});
+
+        const int nJ = max(2, (int)round(point.g.z * 10 / maxHeight));
+        supportTubes.push_back(new Tube(supportLine, radius, nTheta, nJ, false));
+    }
 }
 
 
@@ -103,6 +113,17 @@ void Track::addTies(const Curve *leftRailCurve,
     //
     // 11 lines in instructor solution (YMMV)
     //
+    const int nTies = nTiesPerSupport * nSupports;
+    double u = 0.0;
+    const double uStep = 1.0 / nTies;
+    for (int i = 0; i < nTies; i++, u += uStep)
+    {
+        Point3 leftPoint  = (*leftRailCurve)(u);
+        Point3 rightPoint = (*rightRailCurve)(u);
+
+        auto tieLine = new LineSegment(leftPoint, rightPoint, {0, 0, 1.0});
+        tieTubes.push_back(new Tube(tieLine, radius, nTheta, 4, false));
+    }
 }
 
 
@@ -190,6 +211,7 @@ void Track::setGuideCurve(void)
     //   match the "never parallel" condition, since it is highly
     //   unlikely that your track will ever go straight up.
     //
+    guideCurve = new TrigonometricCurve(mag, freq, phase, offset, {0, 0, 1.0});
 }
 
 
@@ -233,5 +255,20 @@ Track::Track(void) : SceneObject()
     //
     // 40 lines in instructor solution (YMMV)
     //
+    setGuideCurve();
+
+    // Vector3 dp_du;
+    // Point3 P0 = (*guideCurve)(0.0, &dp_du);
+
+    auto leftRailCurve  = new OffsetCurve(guideCurve, {-0.5 * railSep, 0, 0}, {0, 0, 1.0});
+    auto rightRailCurve = new OffsetCurve(guideCurve, { 0.5 * railSep, 0, 0}, {0, 0, 1.0});
+
+    leftRailTube  = new Tube(leftRailCurve,  radius, nTheta, nRailSegments, true);
+    rightRailTube = new Tube(rightRailCurve, radius, nTheta, nRailSegments, true);
+
+    addTies(leftRailCurve, rightRailCurve);
+
+    const int maxSupportHeight = 2 * mag.g.z + offset.g.z;
+    addSupports(maxSupportHeight);
 }
 

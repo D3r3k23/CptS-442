@@ -7,6 +7,9 @@ void Mesh::allocateBuffers(void)
     //
     // Copy your previous (PA06) solution here.
     //
+    CHECK_GL(glGenBuffers(1, &vertexPositionsBufferId));
+    CHECK_GL(glGenBuffers(1, &vertexNormalBufferId));
+    CHECK_GL(glGenBuffers(1, &faceNormalBufferId));
 }
 
 
