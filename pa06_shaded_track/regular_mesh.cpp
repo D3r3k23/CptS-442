@@ -100,7 +100,10 @@ bool RegularMesh::pointsAreDistinct(void)
             if (     -EPSILON < dx && dx < EPSILON
                   && -EPSILON < dy && dy < EPSILON
                   && -EPSILON < dz && dz < EPSILON)
+            {
+                std::cout << "vertexPositions [" << jVertex << "] & [" << iVertex << "] are equal =" << vertexPositions[iVertex] << '\n';
                 return false;
+            }
         }
     }
     return true;
@@ -114,6 +117,7 @@ void RegularMesh::quadBoundary(int iLeft, int jLower, Point3 p[4])
 // both the i and j directions.
 //
 {
+    std::cout << "quadBoundary(" << iLeft << ", " << jLower << ")" << '\n';
     int iRight, jUpper;
 
     //
@@ -267,9 +271,23 @@ const void RegularMesh::renderTriangleStrip(const int j) const
     //   will compare the "stats" on your submission with those on the
     //   official submission to check your code.
     //
+    std::cout << "renderTriangleStrip(j=" << j << ")" << '\n';
     const int nIndicesInStrip = 2 * (nI + wrapI);
-    size_t byteOffset = j * nIndicesInStrip * sizeof(unsigned int);
-    CHECK_GL(glDrawElements(GL_TRIANGLE_STRIP, nIndicesInStrip, GL_DOUBLE, vertexIndices + byteOffset)); // BUFFER_OFFSET() ?
+    std::cout << "nIndicesInStrip = " << nIndicesInStrip << '\n';
+
+    const unsigned bufferOffset = j * nIndicesInStrip * sizeof(unsigned int);
+    std::cout << "bufferOffset = " << bufferOffset << '\n';
+
+    std::cout << "Indices:" << '\n';
+    for (int i = 0; i < nIndicesInStrip; i++)
+        std::cout << "[" << i << "] = " << (vertexIndices + bufferOffset)[i] << '\n';
+
+    CHECK_GL(glDrawElements(
+        GL_TRIANGLE_STRIP,
+        nIndicesInStrip,
+        GL_UNSIGNED_INT,
+        BUFFER_OFFSET(bufferOffset)
+    ));
 
     const int nTrianglesInStrip = nIndicesInStrip - 2 + (int)wrapI;
     renderStats.ctTrianglesInRegularMeshes += nTrianglesInStrip;
@@ -307,6 +325,8 @@ RegularMesh::RegularMesh(Point3 *vertexPositions_, Vector3 *vertexNormals_,
            int nI_, int nJ_, bool wrapI_, bool wrapJ_)
     : nI(nI_), nJ(nJ_), wrapI(wrapI_), wrapJ(wrapJ_)
 {
+    std::cout << "Creating RegularMesh" << '\n';
+
     nVertices = nI * nJ;
     vertexPositions = new Point3[nVertices];
     vertexNormals = new Vector3[nVertices];
@@ -364,6 +384,8 @@ const void RegularMesh::createFaceNormalsAndCentroids(void)
     //
     // 21 lines in instructor solution (YMMV)
     //
+    std::cout << "Creating faceNormals and centroids" << '\n';
+
     const int nQuads = (nI - 1 + (int)wrapI) * (nJ - 1 + (int)wrapJ);
     const int nFaces = 2 * nQuads;
 
@@ -371,12 +393,22 @@ const void RegularMesh::createFaceNormalsAndCentroids(void)
     faceCentroids = new Point3[nFaces];
 
     int iFace = 0;
-    for (int j = 0; j < nJ; j++)
-        for (int i = 0; i < nI; i++)
+    for (int j = 0; j < nJ - 1 + (int)wrapJ; j++)
+        for (int i = 0; i < nI - 1 + (int)wrapI; i++)
         {
             Point3 quadVertices[4];
             quadBoundary(i, j, quadVertices);
 
+            faceNormals[iFace] = faceNormal(
+                quadVertices[0],
+                quadVertices[2],
+                quadVertices[3]
+            );
+            faceCentroids[iFace++] = (
+                quadVertices[0]
+              + quadVertices[2]
+              + quadVertices[3]
+            );
             faceNormals[iFace] = faceNormal(
                 quadVertices[0],
                 quadVertices[1],
@@ -386,16 +418,6 @@ const void RegularMesh::createFaceNormalsAndCentroids(void)
                 quadVertices[0]
               + quadVertices[1]
               + quadVertices[2]
-            );
-            faceNormals[iFace] = faceNormal(
-                quadVertices[2],
-                quadVertices[3],
-                quadVertices[0]
-            );
-            faceCentroids[iFace++] = (
-                quadVertices[2]
-              + quadVertices[3]
-              + quadVertices[0]
             );
         }
 }
