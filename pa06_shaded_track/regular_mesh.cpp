@@ -57,7 +57,7 @@ void RegularMesh::updateBuffers(void)
     
     CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId));
     CHECK_GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-        nVertices * sizeof(unsigned int),
+        nVertexIndices * sizeof(unsigned int),
         vertexIndices,
         GL_STATIC_DRAW
     ));
@@ -101,7 +101,7 @@ bool RegularMesh::pointsAreDistinct(void)
                   && -EPSILON < dy && dy < EPSILON
                   && -EPSILON < dz && dz < EPSILON)
             {
-                std::cout << "vertexPositions [" << jVertex << "] & [" << iVertex << "] are equal =" << vertexPositions[iVertex] << '\n';
+                //std::cout << "vertexPositions [" << jVertex << "] & [" << iVertex << "] are equal =" << vertexPositions[iVertex] << '\n';
                 return false;
             }
         }
@@ -117,7 +117,7 @@ void RegularMesh::quadBoundary(int iLeft, int jLower, Point3 p[4])
 // both the i and j directions.
 //
 {
-    std::cout << "quadBoundary(" << iLeft << ", " << jLower << ")" << '\n';
+    //std::cout << "quadBoundary(" << iLeft << ", " << jLower << ")" << '\n';
     int iRight, jUpper;
 
     //
@@ -271,16 +271,16 @@ const void RegularMesh::renderTriangleStrip(const int j) const
     //   will compare the "stats" on your submission with those on the
     //   official submission to check your code.
     //
-    std::cout << "renderTriangleStrip(j=" << j << ")" << '\n';
+    //std::cout << "renderTriangleStrip(j=" << j << ")" << '\n';
     const int nIndicesInStrip = 2 * (nI + wrapI);
-    std::cout << "nIndicesInStrip = " << nIndicesInStrip << '\n';
+    //std::cout << "nIndicesInStrip = " << nIndicesInStrip << '\n';
 
     const unsigned bufferOffset = j * nIndicesInStrip * sizeof(unsigned int);
-    std::cout << "bufferOffset = " << bufferOffset << '\n';
+    //std::cout << "bufferOffset = " << bufferOffset << '\n';
 
-    std::cout << "Indices:" << '\n';
-    for (int i = 0; i < nIndicesInStrip; i++)
-        std::cout << "[" << i << "] = " << (vertexIndices + bufferOffset)[i] << '\n';
+    //std::cout << "Indices:" << '\n';
+    //for (int i = 0; i < nIndicesInStrip; i++)
+        //std::cout << "[" << i << "] = " << (vertexIndices + bufferOffset)[i] << '\n';
 
     CHECK_GL(glDrawElements(
         GL_TRIANGLE_STRIP,
@@ -290,7 +290,7 @@ const void RegularMesh::renderTriangleStrip(const int j) const
     ));
 
     const int nTrianglesInStrip = nIndicesInStrip - 2 + (int)wrapI;
-    renderStats.ctTrianglesInRegularMeshes += nTrianglesInStrip;
+    renderStats.ctTrianglesInIrregularMeshes += nTrianglesInStrip;
     renderStats.ctTriangleStrips++;
 }
 
@@ -325,7 +325,7 @@ RegularMesh::RegularMesh(Point3 *vertexPositions_, Vector3 *vertexNormals_,
            int nI_, int nJ_, bool wrapI_, bool wrapJ_)
     : nI(nI_), nJ(nJ_), wrapI(wrapI_), wrapJ(wrapJ_)
 {
-    std::cout << "Creating RegularMesh" << '\n';
+    //std::cout << "Creating RegularMesh..." << '\n';
 
     nVertices = nI * nJ;
     vertexPositions = new Point3[nVertices];
@@ -355,6 +355,7 @@ RegularMesh::RegularMesh(Point3 *vertexPositions_, Vector3 *vertexNormals_,
     // rather than in RegularMesh::render().
     //
     updateBuffers();
+    //std::cout << "RegularMesh created" << '\n';
 }
 
 
@@ -384,10 +385,10 @@ const void RegularMesh::createFaceNormalsAndCentroids(void)
     //
     // 21 lines in instructor solution (YMMV)
     //
-    std::cout << "Creating faceNormals and centroids" << '\n';
+    //std::cout << "Creating faceNormals and centroids.." << '\n';
 
     const int nQuads = (nI - 1 + (int)wrapI) * (nJ - 1 + (int)wrapJ);
-    const int nFaces = 2 * nQuads;
+    nFaces = 2 * nQuads;
 
     faceNormals  = new Vector3[nFaces];
     faceCentroids = new Point3[nFaces];

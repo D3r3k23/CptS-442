@@ -85,13 +85,13 @@ void Track::addSupports(const double maxHeight)
     //
     // 15 lines in instructor solution (YMMV)
     //
-    std::cout << "Creating support Tubes..." << '\n';
+    //std::cout << "Creating support Tubes..." << '\n';
     double u = 0.0;
     const double uStep = 1.0 / nSupports;
     for (int i = 0; i < nSupports; i++, u += uStep)
     {
         Point3 point = (*guideCurve)(u);
-        std::cout << "supportTubes[" << i << "]: point = " << point << '\n';
+        //std::cout << "supportTubes[" << i << "]: point = " << point << '\n';
         auto supportLine = new LineSegment({point.g.x, point.g.y, 0.0}, point, {1.0, 0, 0});
 
         const int nJ = max(2, (int)round(point.g.z * 10 / maxHeight));
@@ -148,10 +148,10 @@ void Track::display(const Transform &viewTransform)
     scene->eadsShaderProgram->start();
 
     // draw supports
-    std::cout << "Drawing support Tubes..." << '\n';
+    //std::cout << "Drawing support Tubes..." << '\n';
     for (unsigned int i = 0; i < supportTubes.size(); i++)
     {
-        std::cout << "i=" << i << '\n';
+        //std::cout << "i=" << i << '\n';
         supportTubes[i]->draw(this);
     }
 
@@ -163,10 +163,10 @@ void Track::display(const Transform &viewTransform)
     scene->eadsShaderProgram->start();
 
     // draw ties
-    std::cout << "Drawing tie Tubes..." << '\n';
+    //std::cout << "Drawing tie Tubes..." << '\n';
     for (unsigned int i = 0; i < tieTubes.size(); i++)
     {
-        std::cout << "i=" << i << '\n';
+        //std::cout << "i=" << i << '\n';
         tieTubes[i]->draw(this);
     }
 
@@ -197,9 +197,9 @@ void Track::display(const Transform &viewTransform)
     scene->eadsShaderProgram->start();
 
     // draw rail(s)
-    std::cout << "Drawing left rail Tube..." << '\n';
+    //std::cout << "Drawing left rail Tube..." << '\n';
     leftRailTube->draw(this);
-    std::cout << "Drawing right rail Tube..." << '\n';
+    //std::cout << "Drawing right rail Tube..." << '\n';
     rightRailTube->draw(this);
 
     // draw hedgehogs

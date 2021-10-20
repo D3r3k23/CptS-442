@@ -76,7 +76,7 @@ void Tube::tessellate(void)
     //
     // 16 lines in instructor solution (YMMV)
     //
-    std::cout << "Tesselating Tube" << '\n';
+    //std::cout << "Tesselating Tube" << '\n';
 
     std::vector<Point3>  vertexPositions;
     std::vector<Vector3> vertexNormals;
@@ -85,7 +85,7 @@ void Tube::tessellate(void)
     const double uStep = 1.0 / (isClosed ? nJ : nJ - 1);
     for (int j = 0; j < nJ; j++, u += uStep)
     {
-        std::cout << "j=" << j << ", u=" << u << '\n';
+        //std::cout << "j=" << j << ", u=" << u << '\n';
         assert(0.0 <= u && u <= 1.0);
         Frame frame(curve, u);
 
@@ -93,12 +93,12 @@ void Tube::tessellate(void)
         const double thetaStep = 2.0 * M_PI / nI;
         for (int i = 0; i < nI; i++, theta += thetaStep)
         {
-            std::cout << "theta = " << theta << '\n';
+            //std::cout << "theta = " << theta << '\n';
 
             Vector3 vertexNormal   = Vector3(frame.P.a) + (frame.U - Vector3(frame.P.a)) * cos(theta) + (frame.V - Vector3(frame.P.a)) * sin(theta);
             Point3  vertexPosition = frame.P + radius * (vertexNormal - Vector3(frame.P.a));
 
-            std::cout << "vertexPosition[" << vertexPositions.size() << "]=" << vertexPosition << '\n';
+            //std::cout << "vertexPosition[" << vertexPositions.size() << "]=" << vertexPosition << '\n';
             vertexPositions.push_back(vertexPosition);
             vertexNormals.push_back(vertexNormal);
         }
