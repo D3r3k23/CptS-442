@@ -87,10 +87,10 @@ const Point3 TrigonometricCurve::operator()(const double u,
     //
     if (dp_du)
     {
-        auto h = sqrt(EPSILON);
+        auto h = EPSILON;
         *dp_du = (*this)(u + h) - (*this)(u - h);
     }
     Vec3 angle = 2 * M_PI * (freq * u + phase);
-    return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.y)) * mag + offset;
+    return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
 }
 

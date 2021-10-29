@@ -269,11 +269,8 @@ Track::Track(void) : SceneObject()
     //
     setGuideCurve();
 
-    // Vector3 dp_du;
-    // Point3 P0 = (*guideCurve)(0.0, &dp_du);
-
-    auto leftRailCurve  = new OffsetCurve(guideCurve, {-0.5 * railSep, 0, 0}, {0, 0, 1.0});
-    auto rightRailCurve = new OffsetCurve(guideCurve, { 0.5 * railSep, 0, 0}, {0, 0, 1.0});
+    auto leftRailCurve  = new OffsetCurve(guideCurve, { 0.5 * railSep, 0, 0}, {0, 0, 1.0});
+    auto rightRailCurve = new OffsetCurve(guideCurve, {-0.5 * railSep, 0, 0}, {0, 0, 1.0});
 
     leftRailTube  = new Tube(leftRailCurve,  radius, nTheta, nRailSegments, true);
     rightRailTube = new Tube(rightRailCurve, radius, nTheta, nRailSegments, true);

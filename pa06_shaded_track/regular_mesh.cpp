@@ -290,8 +290,9 @@ const void RegularMesh::renderTriangleStrip(const int j) const
     ));
 
     const int nTrianglesInStrip = nIndicesInStrip - 2 + (int)wrapI;
-    renderStats.ctTrianglesInIrregularMeshes += nTrianglesInStrip;
+    renderStats.ctTrianglesInRegularMeshes += nTrianglesInStrip;
     renderStats.ctTriangleStrips++;
+    renderStats.ctVertices += nIndicesInStrip;
 }
 
 
@@ -400,25 +401,10 @@ const void RegularMesh::createFaceNormalsAndCentroids(void)
             Point3 quadVertices[4];
             quadBoundary(i, j, quadVertices);
 
-            faceNormals[iFace] = faceNormal(
-                quadVertices[0],
-                quadVertices[2],
-                quadVertices[3]
-            );
-            faceCentroids[iFace++] = (
-                quadVertices[0]
-              + quadVertices[2]
-              + quadVertices[3]
-            );
-            faceNormals[iFace] = faceNormal(
-                quadVertices[0],
-                quadVertices[1],
-                quadVertices[2]
-            );
-            faceCentroids[iFace++] = (
-                quadVertices[0]
-              + quadVertices[1]
-              + quadVertices[2]
-            );
+            faceNormals[iFace] = faceNormal(quadVertices[0], quadVertices[2], quadVertices[3]);
+            faceCentroids[iFace++] = (quadVertices[0] + quadVertices[2] + quadVertices[3]) / 3;
+            
+            faceNormals[iFace] = faceNormal(quadVertices[0], quadVertices[1], quadVertices[2]);
+            faceCentroids[iFace++] = (quadVertices[0] + quadVertices[1] + quadVertices[2]) / 3;
         }
 }

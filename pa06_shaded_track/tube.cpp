@@ -95,10 +95,10 @@ void Tube::tessellate(void)
         {
             //std::cout << "theta = " << theta << '\n';
 
-            Vector3 vertexNormal   = Vector3(frame.P.a) + (frame.U - Vector3(frame.P.a)) * cos(theta) + (frame.V - Vector3(frame.P.a)) * sin(theta);
-            Point3  vertexPosition = frame.P + radius * (vertexNormal - Vector3(frame.P.a));
+            Vector3 vertexNormal   = (radius * cos(theta) * frame.U) + (radius * sin(theta) * frame.V);
+            Point3  vertexPosition = frame.P + vertexNormal;
 
-            //std::cout << "vertexPosition[" << vertexPositions.size() << "]=" << vertexPosition << '\n';
+            //std::cout << "vertexPosition[" << i << "]=" << vertexPosition << '\n';
             vertexPositions.push_back(vertexPosition);
             vertexNormals.push_back(vertexNormal);
         }
