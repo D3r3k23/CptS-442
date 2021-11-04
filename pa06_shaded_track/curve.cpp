@@ -32,7 +32,7 @@ const void Curve::coordinateFrame(const double u,
     p = (*this)(u, &vW);
     vW = vW.normalized();
 
-    vU = vNeverParallel.cross(vW).normalized();
+    vU = (vNeverParallel.cross(vW)).normalized();
     vV = vW.cross(vU);
 }
 
