@@ -1,2 +1,2 @@
-*/GL/* linguist-vendored
+**/GL/** linguist-vendored=true
 *.h linguist-language=C++
