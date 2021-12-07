@@ -1,0 +1,321 @@
+PROGRAM = pa07_surfaces.exe
+
+# This file is designed for use with Visual Studio's "NMAKE" program.
+# It probably won't work with (GNU) "make". (See "Makefile", which
+# should.)
+
+# There are 2 sets of macros to define where to find the GLUT, and
+# GLEW headers and libraries on Windows. (MSVC is already set to find
+# the OpenGL headers and libraries itself.)
+
+# -------------------------------------------------------------------
+# GLUT macros
+#
+
+# GLUT *.dll, *.lib, and GL/*.h should be in this directory
+GLUT_TOP_DIR = .
+
+# Where GLUT's "GL" directory (containing "glut.h") resides on
+# Windows.
+GLUT_INCLUDE_DIR = $(GLUT_TOP_DIR)
+
+# The name of the GLUT import (LIB) library.
+GLUT_LIB         = freeglut.lib
+
+# Where GLUT's import library, $(GLUT_LIB), resides on Windows.
+GLUT_LIB_DIR     = $(GLUT_TOP_DIR)
+
+# This is the GLUT DLL library name.
+GLUT_DLL         = freeglut.dll
+
+# Where GLUT's DLL library, $(GLUT_DLL), resides on Windows.
+GLUT_DLL_DIR     = $(GLUT_TOP_DIR)
+
+# -------------------------------------------------------------------
+# GLEW macros
+#
+GLEW_TOP_DIR = .
+
+# Where GLEW's "GL" directory containing "glew.h" resides on Windows.
+GLEW_INCLUDE_DIR       = $(GLEW_TOP_DIR)
+
+# Where GLEW's import (LIB) library resides on Windows.
+GLEW_LIB_DIR           = $(GLEW_TOP_DIR)
+
+# This is the GLEW DLL.
+GLEW_DLL               = glew32.dll
+
+# Where GLEW's DLL, $(GLEW_DLL), resides on Windows.
+GLEW_DLL_DIR           = $(GLEW_TOP_DIR)
+
+# -------------------------------------------------------------------
+
+ALL_DLLS = \
+	$(GLEW_DLL) \
+	$(GLUT_DLL)
+
+CXX = cl.exe
+
+CXX_INCLUDE_FLAGS = \
+	/I $(GLEW_INCLUDE_DIR) \
+	/I $(GLUT_INCLUDE_DIR)
+
+CXX_FLAGS = /nologo /c /W4 /EHsc /D NDEBUG $(CXX_INCLUDE_FLAGS)
+#   /nologo: skip the Microsoft sign-on banner
+#        /c: compile without linking
+#       /W4: warning level
+#     /EHsc: error handling level
+# /D NDEBUG: Need to #define NDEBUG so that freeglut won't specify
+#            "freeglut.lib" instead of "freeglutd.lib" (the latter
+#            doesn't exist)
+#    /I dir: use include directory.
+#
+# Be careful: Case in the above matters.
+
+HDRS = \
+    basis.h \
+    bezier_patch.h \
+    camera.h \
+    check_gl.h \
+    color.h \
+    controller.h \
+    coordinate_axes.h \
+    curve.h \
+    framework.h \
+    geometrical_object.h \
+    geometry.h \
+    ground.h \
+    hedgehog.h \
+    height_field.h \
+    irregular_mesh.h \
+    light.h \
+    lines.h \
+    mesh.h \
+    minmax.h \
+    n_elem.h \
+    obj_io.h \
+    poly_line.h \
+    regular_mesh.h \
+    render_stats.h \
+    scene.h \
+    scene_object.h \
+    shader_programs.h \
+    surface.h \
+    teapot.h \
+    teapot_cvs.h \
+    tessellation.h \
+    text.h \
+    track.h \
+    transform.h \
+    tube.h \
+    vec.h \
+    view.h \
+    work_arounds.h \
+    wrap_cmath_inclusion.h \
+    wrap_gl_inclusion.h \
+    wrap_glut_inclusion.h
+
+LD = link.exe
+
+# normally:
+LD_FLAGS = /nologo
+# but for debugging just what files are getting linked
+#LD_FLAGS = /nologo /verbose
+
+LD_LIBS = \
+	/libpath:$(GLUT_LIB_DIR) freeglut.lib \
+	/libpath:$(GLEW_LIB_DIR) glew32.lib \
+	OpenGL32.lib
+
+# We use this macro to check that environment variables are set
+# whenever we compile or link with Visual Studio.
+#
+# Note: Environment variables imported into NMAKE are all shifted to
+# upper case, so the environment variable "DevEnvDir" must be referred
+# to as "$DEVENVDIR".
+VCVARS_CHECK = \
+	if "$(DEVENVDIR)" == "" \
+	    echo Visual C++ environment varibles not set -- Did you run vcvars32.bat? & \
+		exit 1
+
+$(PROGRAM): basis.obj bezier_patch.obj camera.obj color.obj controller.obj \
+            coordinate_axes.obj curve.obj framework.obj geometry.obj \
+            ground.obj hedgehog.obj height_field.obj irregular_mesh.obj \
+            light.obj lines.obj main.obj mesh.obj obj_io.obj poly_line.obj \
+            regular_mesh.obj render_stats.obj scene.obj scene_object.obj \
+            shader_programs.obj surface.obj teapot.obj teapot_cvs.obj \
+            text.obj track.obj transform.obj tube.obj vec.obj view.obj \
+            $(ALL_DLLS) 
+	@$(VCVARS_CHECK)
+	$(LD) $(LD_FLAGS) /out:"$@" basis.obj bezier_patch.obj camera.obj color.obj \
+	controller.obj coordinate_axes.obj curve.obj framework.obj geometry.obj \
+	ground.obj hedgehog.obj height_field.obj irregular_mesh.obj light.obj \
+	lines.obj main.obj mesh.obj obj_io.obj poly_line.obj regular_mesh.obj \
+	render_stats.obj scene.obj scene_object.obj shader_programs.obj surface.obj \
+	teapot.obj teapot_cvs.obj text.obj track.obj transform.obj tube.obj vec.obj \
+	view.obj $(LD_LIBS) 
+
+# Remember that under Windows, DLL libraries contain the actual code
+# and must reside either in C:\WINDOWS\SYSTEM32 (That's where the GL
+# and GLU libraries reside) or the current directory. Hence, we will
+# copy any DLL files not in C:\WINDOWS\SYSTEM32 to the current
+# directory.
+#
+# Note: For some reason, NMake doesn't like dependencies on the copied
+# (i.e. "$<") files in these rules.
+
+$(GLUT_DLL):
+	copy $(GLUT_DLL_DIR)\$(GLUT_DLL) $@
+
+$(GLEW_DLL):
+	copy $(GLEW_DLL_DIR)\$(GLEW_DLL) $@
+
+
+# Use this target to verify the presence of all "dll"s.
+check-dlls:
+	dir $(GLUT_DLL_DIR)\$(GLUT_DLL)
+	dir $(GLEW_DLL_DIR)\$(GLEW_DLL)
+	dir c:\windows\system32\OpenGL32.dll
+
+# Use this target to verify the presence of all "lib"s.
+check-libs:
+	dir $(GLUT_LIB_DIR)\freeglut.lib
+	dir $(GLEW_LIB_DIR)\glew32.lib
+
+basis.obj: basis.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) basis.cpp
+
+bezier_patch.obj: bezier_patch.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) bezier_patch.cpp
+
+camera.obj: camera.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) camera.cpp
+
+color.obj: color.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) color.cpp
+
+controller.obj: controller.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) controller.cpp
+
+coordinate_axes.obj: coordinate_axes.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) coordinate_axes.cpp
+
+curve.obj: curve.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) curve.cpp
+
+framework.obj: framework.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) framework.cpp
+
+geometry.obj: geometry.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) geometry.cpp
+
+ground.obj: ground.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) ground.cpp
+
+hedgehog.obj: hedgehog.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) hedgehog.cpp
+
+height_field.obj: height_field.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) height_field.cpp
+
+irregular_mesh.obj: irregular_mesh.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) irregular_mesh.cpp
+
+light.obj: light.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) light.cpp
+
+lines.obj: lines.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) lines.cpp
+
+main.obj: main.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) main.cpp
+
+mesh.obj: mesh.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) mesh.cpp
+
+obj_io.obj: obj_io.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) obj_io.cpp
+
+poly_line.obj: poly_line.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) poly_line.cpp
+
+regular_mesh.obj: regular_mesh.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) regular_mesh.cpp
+
+render_stats.obj: render_stats.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) render_stats.cpp
+
+scene.obj: scene.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) scene.cpp
+
+scene_object.obj: scene_object.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) scene_object.cpp
+
+shader_programs.obj: shader_programs.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) shader_programs.cpp
+
+surface.obj: surface.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) surface.cpp
+
+teapot.obj: teapot.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) teapot.cpp
+
+teapot_cvs.obj: teapot_cvs.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) teapot_cvs.cpp
+
+text.obj: text.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) text.cpp
+
+track.obj: track.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) track.cpp
+
+transform.obj: transform.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) transform.cpp
+
+tube.obj: tube.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) tube.cpp
+
+vec.obj: vec.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) vec.cpp
+
+view.obj: view.cpp $(HDRS)
+	@$(VCVARS_CHECK)
+	$(CXX) $(CXX_FLAGS) view.cpp
+
+clean:
+	del/s/q *.o *.obj *.E *~ >NUL
+
+immaculate: clean
+	del/s/q $(PROGRAM) $(ALL_DLLS) >NUL
