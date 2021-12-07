@@ -107,6 +107,7 @@ const double Curve::zMax(void) const
         if (z > zMax)
             zMax = z;
     }
+    return zMax;
 }
 
 
