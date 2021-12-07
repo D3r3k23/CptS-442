@@ -58,7 +58,7 @@ void Surface::tessellate(void)
             Vector3 dp_du, dp_dv;
             Point3 position = (*this)(u, v, dp_du, dp_dv);
 
-            Vector3 normal = dp_dv.cross(dp_du).normalized();
+            Vector3 normal = dp_du.cross(dp_dv).normalized();
 
             vertexPositions.push_back(position);
             vertexNormals.push_back(normal);
