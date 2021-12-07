@@ -1,0 +1,561 @@
+%PDF-1.4
+%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+1 0 obj
+<<
+/F1 2 0 R /F2 3 0 R /F3 4 0 R
+>>
+endobj
+2 0 obj
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
+endobj
+3 0 obj
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
+endobj
+4 0 obj
+<<
+/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
+>>
+endobj
+5 0 obj
+<<
+/Contents 9 0 R /MediaBox [ 0 0 612 792 ] /Parent 8 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+6 0 obj
+<<
+/PageLabels 10 0 R /PageMode /UseNone /Pages 8 0 R /Type /Catalog
+>>
+endobj
+7 0 obj
+<<
+/Author () /CreationDate (D:20211130083724+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20211130083724+00'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+  /Subject (\(unspecified\)) /Title (PA11: Custom Coaster) /Trapped /False
+>>
+endobj
+8 0 obj
+<<
+/Count 1 /Kids [ 5 0 R ] /Type /Pages
+>>
+endobj
+9 0 obj
+<<
+/Length 8889
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 62.69291 691.1339 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 4 Tm /F2 20 Tf 24 TL 134.9571 0 Td (PA11: Custom Coaster) Tj T* -134.9571 0 Td ET
+Q
+Q
+q
+1 0 0 1 62.69291 657.1339 cm
+q
+BT 1 0 0 1 0 14 Tm .344363 Tw 12 TL /F1 10 Tf 0 0 0 rg (In this assignment, you have the opportunity to modify ) Tj /F3 10 Tf (coaster) Tj /F1 10 Tf ( in an original way. This document lists several) Tj T* 0 Tw (possible changes with point values. For full credit, you need to implement at least five points' worth.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 651.1339 cm
+Q
+q
+1 0 0 1 62.69291 651.1339 cm
+Q
+q
+1 0 0 1 62.69291 543.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 93 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (a.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 81 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .32443 Tw ([ 2 points ] Change the track. It must continue to be a B-spline, but must have additional control vertices) Tj T* 0 Tw (at different positions. The path will change, but must still remain "believeable":) Tj T* ET
+Q
+Q
+q
+1 0 0 1 23 75 cm
+Q
+q
+1 0 0 1 23 75 cm
+Q
+q
+1 0 0 1 23 63 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (It cannot intersect itself.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 23 57 cm
+Q
+q
+1 0 0 1 23 45 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (It cannot pass through the ground.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 23 39 cm
+Q
+q
+1 0 0 1 23 15 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+BT 1 0 0 1 0 14 Tm .394945 Tw 12 TL /F1 10 Tf 0 0 0 rg (It cannot pass through the teapot \(or whatever replaces the teapot\), although it ) Tj /F3 10 Tf (could) Tj /F1 10 Tf ( pass through) Tj T* 0 Tw (the finger hole in the teapot.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 23 15 cm
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Extra fun: Make it a corkscrew or loop-the-loop.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 537.1339 cm
+Q
+q
+1 0 0 1 62.69291 525.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (b.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 3 points ] Apply some kind of texturing to the cars or the teapot \(choose one\).) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 519.1339 cm
+Q
+q
+1 0 0 1 62.69291 495.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 6.22 0 Td (c.) Tj T* -6.22 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 2.600834 Tw ([ 1 point ] Replace the teapot with an "*.obj" model \(like the car\). \("teapot.obj" not allowed!\) \(not) Tj T* 0 Tw (compatible with \(e\)\)) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 489.1339 cm
+Q
+q
+1 0 0 1 62.69291 465.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (d.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .255787 Tw ([ 2 points ] Replace the teapot with a procedurally-defined object. It must appear to "rest" on the ground.) Tj T* 0 Tw (\(not compatible with \(d\)\)) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 459.1339 cm
+Q
+q
+1 0 0 1 62.69291 435.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (e.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .477588 Tw ([ 2 points ] Replace the cars with "*.obj" models. Be sure they are positioned and move above the track) Tj T* 0 Tw (realistically.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 429.1339 cm
+Q
+q
+1 0 0 1 62.69291 417.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 8.44 0 Td (f.) Tj T* -8.44 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 2 points ] Add "rings" to the supports so that cars pass through them.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 411.1339 cm
+Q
+q
+1 0 0 1 62.69291 399.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (g.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 1 point ] Change the "skybox" \(several are available on-line\).) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 393.1339 cm
+Q
+q
+1 0 0 1 62.69291 369.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (h.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.056709 Tw ([ 4 points ] Change the coaster to a night scene with lit globes on poles attached to the supports and) Tj T* 0 Tw (working headlights \(spotlights\) on the cars.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 363.1339 cm
+Q
+q
+1 0 0 1 62.69291 351.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 9 0 Td (i.) Tj T* -9 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 3 points ] Add gravity-controlled firework explosions.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 345.1339 cm
+Q
+q
+1 0 0 1 62.69291 333.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 9 0 Td (j.) Tj T* -9 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 2 points ] Creatively modify vertex and fragment shaders. \(e.g., Make the cars stretch or bounce.\)) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 327.1339 cm
+Q
+q
+1 0 0 1 62.69291 315.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 6.22 0 Td (k.) Tj T* -6.22 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 3 points ] Put physically-correct spinning wheels on the cars.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 309.1339 cm
+Q
+q
+1 0 0 1 62.69291 285.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 9 0 Td (l.) Tj T* -9 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.203904 Tw ([ 3 points ] Use environment mapping to make the track or the cars \(pick one\) appear with a chrome) Tj T* 0 Tw (finish.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 279.1339 cm
+Q
+q
+1 0 0 1 62.69291 267.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 2.89 0 Td (m.) Tj T* -2.89 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 2 points ] Make the car "leap" an empty section of track \(also omitting ties and supports\).) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 261.1339 cm
+Q
+q
+1 0 0 1 62.69291 249.1339 cm
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (n.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL ([ 3 points ] Put bump-mapped "rivets" on the car's faces.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+q
+1 0 0 1 62.69291 249.1339 cm
+Q
+q
+1 0 0 1 62.69291 231.1339 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Feel free to propose other customizations. The instructor will award them appropriate point values.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 189.1339 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL -0.085989 Tw (To ensure that each assignment is unique, email your preferred customizations to the instructor for approval. If) Tj T* 0 Tw .793826 Tw (they are not unique, he will inform you of the need to change them. If they are unique, he will send you the) Tj T* 0 Tw (message "You are approved." You should not begin work until you get this message.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 123.1339 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 50 Tm /F1 10 Tf 12 TL .278641 Tw (The instructor will expect to see the project you propose. If you do not implement everything you say you will,) Tj T* 0 Tw 1.707818 Tw (you will not get full points, no matter how ambitious your project is. For the the sake of your grade, it is) Tj T* 0 Tw 2.102136 Tw (therefore not recommended that you propose more than five or six points total. You may resubmit your) Tj T* 0 Tw .542851 Tw (proposed project at any time \(perhaps making it less ambitious\) but doing so runs the risk of being similar to) Tj T* 0 Tw (an approved project and not getting \(re\)approved as a result.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 62.69291 93.13386 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .714636 Tw (Remember that this programming assignment is to be entirely the work of individual students. No teams are) Tj T* 0 Tw (allowed.) Tj T* ET
+Q
+Q
+ 
+endstream
+endobj
+10 0 obj
+<<
+/Nums [ 0 11 0 R ]
+>>
+endobj
+11 0 obj
+<<
+/S /D /St 1
+>>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000073 00000 n 
+0000000124 00000 n 
+0000000231 00000 n 
+0000000343 00000 n 
+0000000458 00000 n 
+0000000651 00000 n 
+0000000738 00000 n 
+0000001015 00000 n 
+0000001074 00000 n 
+0000010014 00000 n 
+0000010055 00000 n 
+trailer
+<<
+/ID 
+[<eeea2f374cc8db593500a7e18399e6b7><eeea2f374cc8db593500a7e18399e6b7>]
+% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+
+/Info 7 0 R
+/Root 6 0 R
+/Size 12
+>>
+startxref
+10089
+%%EOF
