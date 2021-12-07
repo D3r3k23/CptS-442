@@ -70,7 +70,6 @@ vec3 getRadiance(vec3 worldNormal, vec3 towardsCamera)
 //
 {
     vec3 radiance = emittance;
-    vec3 worldNormal = normalize(normalMatrix * vertexNormal);
 
     for (int i = 0; i < nLights; i++)
     {
@@ -89,6 +88,7 @@ vec3 getRadiance(vec3 worldNormal, vec3 towardsCamera)
         }
         radiance += light[i].irradiance * reflectivity;
     }
+    return radiance;
 }
 
 void main(void)
@@ -96,6 +96,14 @@ void main(void)
     //
     // Copy your previous (PA08) solution here.
     //
+    vec4 worldPosition = worldMatrix * vertexPosition;
+    vec3 worldNormal = normalize(normalMatrix * vertexNormal);
+
+    vec3 towardsCamera;
+    if (useOrthographic == 1)
+        towardsCamera = normalize(orthographicTowards);
+    else
+        towardsCamera = normalize(cameraPosition - worldPosition.xyz);
 
     //
     // ASSIGNMENT (PA09)
@@ -104,7 +112,7 @@ void main(void)
     // expression that makes a single call to getRadiance(). This
     // should not change the image in any way.
     //
-    vec3 radiance = getRandiance();
+    vec3 radiance = getRadiance(worldNormal, towardsCamera);
 
     interpolatedVertexColor = vec4(radiance, 1);
 #if 0 // debug

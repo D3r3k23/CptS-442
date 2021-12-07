@@ -102,8 +102,6 @@ void Track::addSupports(const double maxHeight, const Ground *ground)
 
     double s = 0.0;
     double sNextTie = 0.0;
-
-    double s = 0.0;
     double sNextSupport = 0.0;
 
     for (int i = 0; i < nU; i++)
