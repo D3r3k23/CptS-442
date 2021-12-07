@@ -9,6 +9,7 @@ void RegularMesh::allocateBuffers(void)
     //
     // Copy your previous (PA06) solution here.
     //
+    CHECK_GL(glGenBuffers(1, &indexBufferId));
     Mesh::allocateBuffers();
 }
 
@@ -18,6 +19,26 @@ void RegularMesh::updateBuffers(void)
     //
     // Copy your previous (PA06) solution here.
     //
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexPositionsBufferId));
+    CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
+        nVertices * sizeof(Point3),
+        vertexPositions,
+        GL_STATIC_DRAW
+    ));
+    
+    CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId));
+    CHECK_GL(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+        nVertexIndices * sizeof(unsigned int),
+        vertexIndices,
+        GL_STATIC_DRAW
+    ));
+    
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexNormalBufferId));
+    CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
+        nVertices * sizeof(Vector3),
+        vertexNormals,
+        GL_STATIC_DRAW
+    ));
 }
 
 
@@ -108,6 +129,38 @@ const void RegularMesh::render(void)
     //
     // Copy your previous (PA06) solution here.
     //
+    GLint vpai = ShaderProgram::getCurrentAttributeIndex("vertexPosition");
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexPositionsBufferId));
+    CHECK_GL(glEnableVertexAttribArray(vpai));
+    CHECK_GL(glVertexAttribPointer(
+        vpai,
+        3,
+        GL_DOUBLE,
+        GL_FALSE,
+        0,
+        BUFFER_OFFSET(0)
+    ));
+
+
+    GLint vnai = ShaderProgram::getCurrentAttributeIndex("vertexNormal");
+    if (vnai != NO_SUCH_ATTRIBUTE)
+    {
+        CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexNormalBufferId));
+        CHECK_GL(glEnableVertexAttribArray(vnai));
+        CHECK_GL(glVertexAttribPointer(
+            vnai,
+            3,
+            GL_DOUBLE,
+            GL_FALSE,
+            0,
+            BUFFER_OFFSET(0)
+        ));
+    }
+
+    CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId));
+
+    for (int j = 0; j < nJ - 1 + (int)wrapJ; j++)
+        renderTriangleStrip(j);
 }
 
 
@@ -116,6 +169,21 @@ const void RegularMesh::renderTriangleStrip(const int j) const
     //
     // Copy your previous (PA06) solution here.
     //
+    const int nIndicesInStrip = 2 * (nI + wrapI);
+
+    const unsigned bufferOffset = j * nIndicesInStrip * sizeof(unsigned int);
+
+    CHECK_GL(glDrawElements(
+        GL_TRIANGLE_STRIP,
+        nIndicesInStrip,
+        GL_UNSIGNED_INT,
+        BUFFER_OFFSET(bufferOffset)
+    ));
+
+    const int nTrianglesInStrip = nIndicesInStrip - 2 + (int)wrapI;
+    renderStats.ctTrianglesInRegularMeshes += nTrianglesInStrip;
+    renderStats.ctTriangleStrips++;
+    renderStats.ctVertices += nIndicesInStrip;
 }
 
 
@@ -185,4 +253,23 @@ const void RegularMesh::createFaceNormalsAndCentroids(void)
     //
     // Copy your previous (PA06) solution here.
     //
+    const int nQuads = (nI - 1 + (int)wrapI) * (nJ - 1 + (int)wrapJ);
+    nFaces = 2 * nQuads;
+
+    faceNormals  = new Vector3[nFaces];
+    faceCentroids = new Point3[nFaces];
+
+    int iFace = 0;
+    for (int j = 0; j < nJ - 1 + (int)wrapJ; j++)
+        for (int i = 0; i < nI - 1 + (int)wrapI; i++)
+        {
+            Point3 quadVertices[4];
+            quadBoundary(i, j, quadVertices);
+
+            faceNormals[iFace] = faceNormal(quadVertices[0], quadVertices[2], quadVertices[3]);
+            faceCentroids[iFace++] = (quadVertices[0] + quadVertices[2] + quadVertices[3]) / 3;
+            
+            faceNormals[iFace] = faceNormal(quadVertices[0], quadVertices[1], quadVertices[2]);
+            faceCentroids[iFace++] = (quadVertices[0] + quadVertices[1] + quadVertices[2]) / 3;
+        }
 }

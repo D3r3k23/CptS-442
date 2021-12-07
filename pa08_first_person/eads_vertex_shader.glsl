@@ -83,10 +83,37 @@ void main(void)
     // add a perspective view, the camera is at a fixed location so
     // the direction towards it depends on the vertex we're shading.
     //
+    vec4 worldPosition = worldMatrix * vertexPosition;
+
+    vec3 towardsCamera;
+    if (useOrthographic == 1)
+        towardsCamera = normalize(orthographicTowards);
+    else
+        towardsCamera = normalize(cameraPosition - worldPosition.xyz);
 
     //
     // Copy your previous (PA06) solution here.
     //
+    vec3 radiance = emittance;
+    vec3 worldNormal = normalize(normalMatrix * vertexNormal);
+
+    for (int i = 0; i < nLights; i++)
+    {
+        vec3 towardsLight = normalize(light[i].towards);
+        float nDotL = dot(worldNormal, towardsLight);
+
+        vec3 reflectivity = ambientReflectivity;
+        if (nDotL >= 0)
+        {
+            reflectivity += nDotL * maximumDiffuseReflectivity;
+            vec3 h = normalize(towardsCamera + towardsLight);
+            float nDotH = dot(worldNormal, h);
+
+            if (nDotH >= 0)
+                reflectivity += maximumSpecularReflectivity * pow(nDotH, specularExponent);
+        }
+        radiance += light[i].irradiance * reflectivity;
+    }
 
     interpolatedVertexColor = vec4(radiance, 1);
 #if 0 // debug

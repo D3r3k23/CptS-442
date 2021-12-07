@@ -69,6 +69,9 @@ const void Curve::coordinateFrame(const double u,
                             Point3 &p, Vector3 &vU, Vector3 &vV, Vector3 &vW)
     const
 {
+    //
+    // Copy your previous (PA06) solution here
+    //
     p = (*this)(u, &vW);
     vW = vW.normalized();
 
@@ -127,4 +130,3 @@ const Point3 TrigonometricCurve::operator()(const double u,
     Vec3 angle = 2 * M_PI * (freq * u + phase);
     return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
 }
-

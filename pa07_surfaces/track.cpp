@@ -189,37 +189,36 @@ void Track::setGuideCurve(const Layout layout,
     // Replace the code you put here for PA06 (setting the guide
     // curve) with the following:
     //
-    switch (layout) {
-
-    case LAYOUT_BSPLINE:
+    switch (layout)
+    {
+        case LAYOUT_BSPLINE:
         {
-        vector<Point3> cvs_ = readPoint3s(trackBsplineCvsFname);
-        guideCurve = new BSplineCurve(cvs_, true, vZ);
+            vector<Point3> cvs_ = readPoint3s(trackBsplineCvsFname);
+            guideCurve = new BSplineCurve(cvs_, true, vZ);
+            break;
         }
-        break;
-
-    case LAYOUT_PLANAR_CIRCLE:
+        case LAYOUT_PLANAR_CIRCLE:
         {
-        //
-        // This is a circle of radius 1.0 which is 0.2 NDC units off
-        // the ground. These parameters are distinct from those used
-        // for the trig layout.
-        //
-        const Vec3       mag( 1.0,  1.0,  0.0);
-        const Vec3      freq( 1.0, -1.0,  0.0);
-        const Point3  offset( 0.0,  0.0,  0.2);
-        const Vec3     phase( 0.0,  0.25, 0.0);
-        guideCurve = new TrigonometricCurve(mag, freq, phase, offset, vZ);
+            //
+            // This is a circle of radius 1.0 which is 0.2 NDC units off
+            // the ground. These parameters are distinct from those used
+            // for the trig layout.
+            //
+            const Vec3       mag( 1.0,  1.0,  0.0);
+            const Vec3      freq( 1.0, -1.0,  0.0);
+            const Point3  offset( 0.0,  0.0,  0.2);
+            const Vec3     phase( 0.0,  0.25, 0.0);
+            guideCurve = new TrigonometricCurve(mag, freq, phase, offset, vZ);
+            break;
         }
-        break;
-
-    case LAYOUT_TRIG:
-        guideCurve = new TrigonometricCurve(mag, freq, phase, offset, vZ);
-        break;
-
-    default:
-        // should not be reached (bad track numbers should be caught in main())
-        assert(false);
+        case LAYOUT_TRIG:
+        {
+            guideCurve = new TrigonometricCurve(mag, freq, phase, offset, vZ);
+            break;
+        }
+        default:
+            // should not be reached (bad track numbers should be caught in main())
+            assert(false);
     }
 }
 

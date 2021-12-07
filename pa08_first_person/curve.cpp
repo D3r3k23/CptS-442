@@ -80,7 +80,20 @@ const Transform Curve::coordinateFrame(const double u) const
     //
     // 13 lines in instructor solution (YMMV)
     //
-    return Transform(); // replace (permits template to compile cleanly)
+    Point3 p;
+    Vector3 vW;
+    p = (*this)(u, &vW);
+    vW = vW.normalized();
+
+    Vector3 vU = vNeverParallel.cross(vW).normalized();
+    Vector3 vV = vW.cross(vU);
+
+    return {
+        vU.g.x, vV.g.x, vW.g.x, p.g.x,
+        vU.g.y, vV.g.y, vW.g.y, p.g.y,
+        vU.g.z, vV.g.z, vW.g.z, p.g.z,
+        0.0,    0.0,    0.0,    1.0
+    };
 }
 
 
@@ -95,8 +108,6 @@ const Point3 LineSegment::operator()(const double u, Vector3 *dp_du) const
 
 const Point3 OffsetCurve::operator()(const double u, Vector3 *dp_du) const
 {
-    Point3 p;
-
     (*frameCurve)(u, dp_du);
     Transform transform = frameCurve->coordinateFrame(u);
     // offset is a vector, but we want to transform it like a point,
@@ -123,6 +134,12 @@ const Point3 TrigonometricCurve::operator()(const double u,
     //
     // Copy your previous (PA06) solution here.
     //
-    return Point3(); // replace (permits template to compile cleanly)
+    if (dp_du)
+    {
+        auto h = EPSILON;
+        *dp_du = (*this)(u + h) - (*this)(u - h);
+    }
+    Vec3 angle = 2 * M_PI * (freq * u + phase);
+    return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
 }
 

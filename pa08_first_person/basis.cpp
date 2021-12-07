@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <cmath>
 
 #include "basis.h"
 
@@ -11,6 +12,18 @@ const void BezierBasis::operator()(const double u,
     //
     // Copy your previous (PA07) solution here.
     //
+    bs[0] = pow(1 - u, 3);
+    bs[1] = 3 * u * pow(1 - u, 2);
+    bs[2] = 3 * pow(u, 2) * (1 - u);
+    bs[3] = pow(u, 3);
+
+    if (db_dus)
+    {
+        (*db_dus)[0] = -3 * pow(1 - u, 2);
+        (*db_dus)[1] =  9 * pow(u, 2) - 12 * u + 3;
+        (*db_dus)[2] =  3 * (2 - 3 * u) * u;
+        (*db_dus)[3] =  3 * pow(u, 2);
+    }
 }
 
 const void UniformCubicBSplineBasis::operator()(

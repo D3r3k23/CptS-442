@@ -71,6 +71,18 @@ void Track::addSupports(const double maxHeight, const Ground *ground)
     //
     // Copy your previous (PA07) solution here.
     //
+    double u = 0.0;
+    const double uStep = 1.0 / nSupports;
+    for (int i = 0; i < nSupports; i++, u += uStep)
+    {
+        Point3 point = (*guideCurve)(u);
+        double x = point.g.x;
+        double y = point.g.y;
+        auto supportLine = new LineSegment({x, y, ground->height(x, y)}, point, {1.0, 0.0, 0.0});
+
+        const int nJ = max(2, (int)round(point.g.z * 10 / maxHeight));
+        supportTubes.push_back(new Tube(supportLine, radius, nTheta, nJ, false));
+    }
 }
 
 
@@ -80,6 +92,17 @@ void Track::addTies(const Curve *leftRailCurve,
     //
     // Copy your previous (PA06) solution here.
     //
+    const int nTies = nTiesPerSupport * nSupports;
+    double u = 0.0;
+    const double uStep = 1.0 / nTies;
+    for (int i = 0; i < nTies; i++, u += uStep)
+    {
+        Point3 leftPoint  =  (*leftRailCurve)(u);
+        Point3 rightPoint = (*rightRailCurve)(u);
+
+        auto tieLine = new LineSegment(leftPoint, rightPoint, {0.0, 0.0, 1.0});
+        tieTubes.push_back(new Tube(tieLine, radius, nTheta, 4, false));
+    }
 }
 
 
@@ -162,6 +185,37 @@ void Track::setGuideCurve(const Layout layout,
     //
     // Copy your previous (PA07) solution here.
     //
+    switch (layout)
+    {
+        case LAYOUT_BSPLINE:
+        {
+            vector<Point3> cvs_ = readPoint3s(trackBsplineCvsFname);
+            guideCurve = new BSplineCurve(cvs_, true, vZ);
+            break;
+        }
+        case LAYOUT_PLANAR_CIRCLE:
+        {
+            //
+            // This is a circle of radius 1.0 which is 0.2 NDC units off
+            // the ground. These parameters are distinct from those used
+            // for the trig layout.
+            //
+            const Vec3       mag( 1.0,  1.0,  0.0);
+            const Vec3      freq( 1.0, -1.0,  0.0);
+            const Point3  offset( 0.0,  0.0,  0.2);
+            const Vec3     phase( 0.0,  0.25, 0.0);
+            guideCurve = new TrigonometricCurve(mag, freq, phase, offset, vZ);
+            break;
+        }
+        case LAYOUT_TRIG:
+        {
+            guideCurve = new TrigonometricCurve(mag, freq, phase, offset, vZ);
+            break;
+        }
+        default:
+            // should not be reached (bad track numbers should be caught in main())
+            assert(false);
+    }
 }
 
 
@@ -171,6 +225,18 @@ Track::Track(const Layout layout, const string trackBsplineCvsFname,
     //
     // Copy your previous (PA07) solution here.
     //
+    setGuideCurve(layout, trackBsplineCvsFname);
+
+    auto leftRailCurve  = new OffsetCurve(guideCurve, { 0.5 * railSep, 0.0, 0.0}, {0.0, 0.0, 1.0});
+    auto rightRailCurve = new OffsetCurve(guideCurve, {-0.5 * railSep, 0.0, 0.0}, {0.0, 0.0, 1.0});
+
+    leftRailTube  = new Tube(leftRailCurve,  radius, nTheta, nRailSegments, true);
+    rightRailTube = new Tube(rightRailCurve, radius, nTheta, nRailSegments, true);
+
+    addTies(leftRailCurve, rightRailCurve);
+
+    const int maxSupportHeight = 2 * mag.g.z + offset.g.z;
+    addSupports(maxSupportHeight, ground);
 }
 
 

@@ -34,6 +34,18 @@ const Point3 Tube::operator()(const double u, const double v,
     //
     // 7 lines in instructor solution (YMMV)
     //
-    return Point3(); // replace (permits template to compile cleanly)
+    double theta = 2.0 * M_PI * u;
+    Vector3 Q = {radius * cos(theta), radius * sin(theta), 0.0};
+
+    Transform transform = curve->coordinateFrame(v);
+    Point3 P = transform * (Point3{0.0, 0.0, 0.0} + Q);
+
+    Vector3 vW{0.0, 0.0, 1.0};
+    Vector3 vQ = Q.cross(vW).normalized();
+
+    dp_du = transform * vQ;
+    dp_dv = transform * vW;
+
+    return P;
 }
 

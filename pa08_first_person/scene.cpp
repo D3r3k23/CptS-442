@@ -134,14 +134,13 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname)
     // 40 lines in instructor solution (YMMV)
     //
     Ground* ground = new Ground(32.0);
-    camera.setExtent(32.0);
-
-    if (layout != LAYOUT_TRIG)
-        addSceneObject(new Teapot());
+    addSceneObject(ground);
     
-    addSceneObject(new Track(layout, trackBsplineCvsFname, ground));
+    track = new Track(layout, trackBsplineCvsFname, ground);
+    addSceneObject(track);
 
-    const Rgb carColors[] = {
+    #define N_CAR_COLORS 6
+    const Rgb carColors[N_CAR_COLORS] = {
         {1.0, 0.0, 0.0},
         {0.0, 1.0, 0.0},
         {0.0, 0.0, 1.0},
@@ -153,11 +152,18 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname)
     cars = new Car*[nCars];
     for (int i = 0; i < nCars; i++)
     {
-        Car* car = new Car(carColors[i % nCars], (double)i / nCars, track->guideCurve);
+        Car* car = new Car(carColors[i % N_CAR_COLORS], (double)i / nCars, track->guideCurve);
         cars[i] = car;
         addSceneObject(car);
     }
 
+    if (layout != LAYOUT_TRIG)
+        addSceneObject(new Teapot());
+    
+    camera.setExtent(32.0);
     camera.setPath(track->guideCurve);
+
+    addLight(new Light(whiteColor, {0.0, 0.0, -1.0})); // Sun
+    addLight(new Light(whiteColor * 0.5, {0.0, 1.0, 0.0})); // Searchlight
 }
 

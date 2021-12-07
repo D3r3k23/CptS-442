@@ -40,7 +40,7 @@ class RegularMesh : public Mesh
         //
         // Copy your previous (PA06) solution here.
         //
-        return 0; // replace (permits template to compile cleanly)
+        return j * nI + i;
     };
 
 public:

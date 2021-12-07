@@ -37,6 +37,10 @@ Car::Car(const Rgb &baseRgb_, double initialU, const Curve *path_)
     //
     // 13 lines in instructor solution (YMMV)
     //
+    irregularMesh = IrregularMesh::read(carFname);
+    path = path_;
+    u = initialU;
+    baseRgb = baseRgb_;
 
     // Since the car's IrregularMesh doesn't need to be tessellated
     // (effectively), we can create the hedgehogs immediately.
@@ -84,6 +88,16 @@ void Car::display(const Transform &viewProjectionTransform,
     //   (Remember, the vertices will first be transformed by (e),
     //   (d), (c), then (b) then (a).)
     //
+    if (!path)
+        modelTransform = Transform();
+    else
+    {
+        modelTransform = path->coordinateFrame(u);
+        modelTransform.scale(0.125, 0.125, 0.125);
+        modelTransform.translate(0.0, 0.2, 0.0);
+        modelTransform.rotate(-M_PI / 2, {0.0, 1.0, 0.0});
+        modelTransform.rotate(-M_PI / 2, {1.0, 0.0, 0.0});
+    }
 
     if (scene->eadsShaderProgram) { // will be NULL in the template
         double specFrac = 0.25; // fraction of reflected power that's specular
