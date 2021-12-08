@@ -73,7 +73,26 @@ vec3 getRadiance(vec3 worldNormal, vec3 towardsCamera)
 // Copy your previous (PA09) solution here.
 //
 {
-    return vec3(0,0,0); // to be replaced
+    vec3 radiance = emittance;
+
+    for (int i = 0; i < nLights; i++)
+    {
+        vec3 towardsLight = normalize(light[i].towards);
+        float nDotL = dot(worldNormal, towardsLight);
+
+        vec3 reflectivity = ambientReflectivity;
+        if (nDotL >= 0)
+        {
+            reflectivity += nDotL * maximumDiffuseReflectivity;
+            vec3 h = normalize(towardsCamera + towardsLight);
+            float nDotH = dot(worldNormal, h);
+
+            if (nDotH >= 0)
+                reflectivity += maximumSpecularReflectivity * pow(nDotH, specularExponent);
+        }
+        radiance += light[i].irradiance * reflectivity;
+    }
+    return radiance;
 }
 
 void main(void)
@@ -81,6 +100,14 @@ void main(void)
     //
     // Copy your previous (PA08) solution here.
     //
+    vec4 worldPosition = worldMatrix * vertexPosition;
+    vec3 worldNormal = normalize(normalMatrix * vertexNormal);
+
+    vec3 towardsCamera;
+    if (useOrthographic == 1)
+        towardsCamera = normalize(orthographicTowards);
+    else
+        towardsCamera = normalize(cameraPosition - worldPosition.xyz);
 
     //
     // ASSIGNMENT (PA10)
@@ -90,6 +117,14 @@ void main(void)
     // `interpolatedWorldNormal` to `worldNormal` and
     // `interpolatedTowardsCamera` to `towardsCamera`.
     //
+    vec3 radiance;
+    if (useGouraudShading)
+        radiance = getRadiance(worldNormal, towardsCamera);
+    else
+    {
+        interpolatedWorldNormal = towardsCamera;
+        interpolatedTowardsCamera = towardsCamera;
+    }
 
     interpolatedVertexColor = vec4(radiance, 1);
 #if 0 // debug

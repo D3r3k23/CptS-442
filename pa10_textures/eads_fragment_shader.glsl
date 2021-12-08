@@ -103,6 +103,44 @@ vec3 getTexturedRadiance(vec3 worldNormal, vec3 towardsCamera)
 //   realism that will be explained in lecture.
 //
 {
+    vec3 radiance;
+    vec3 textureRgb
+    if (useTextures)
+    {
+        textureRgb = texture(imageTexture, interpolatedTextureCoordinates).rgb;
+        radiance = textureRgb * emittanceTextureWeight;
+    }
+    else
+        radiance = emittance;
+
+    for (int i = 0; i < nLights; i++)
+    {
+        vec3 towardsLight = normalize(light[i].towards);
+        float nDotL = dot(worldNormal, towardsLight);
+
+        vec3 reflectivity;
+        if (useTextures)
+            reflectivity = ambientTextureWeight * textureRgb;
+        else
+            reflectivity = ambientReflectivity;
+
+        if (nDotL >= 0)
+        {
+            if (useTextures)
+                reflectivity += diffuseTextureWeight * textureRgb * nDotL;
+            else
+                reflectivity += nDotL * maximumDiffuseReflectivity;
+
+            vec3 h = normalize(towardsCamera + towardsLight);
+            float nDotH = dot(worldNormal, h);
+
+            if (nDotH >= 0)
+                reflectivity += maximumSpecularReflectivity * pow(nDotH, specularExponent);
+        }
+        radiance += light[i].irradiance * reflectivity;
+    }
+    return radiance;
+
     return light[0].irradiance; // replace this with the correct expression
 }
 
@@ -113,9 +151,6 @@ void main(void)
     else {
         // Notice that we have to normalize the interpolated variables,
         // as interpolation does not, in general, preserve length.
-        fragmentColor = vec4(getTexturedRadiance(
-                                 normalize(interpolatedWorldNormal),
-                                 normalize(interpolatedTowardsCamera)),
-                             1);
+        fragmentColor = vec4(getTexturedRadiance(normalize(interpolatedWorldNormal), normalize(interpolatedTowardsCamera)), 1);
     }
 }

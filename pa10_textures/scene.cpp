@@ -50,7 +50,7 @@ const double Scene::cameraSpeed(void) const
     //
     // Copy your previous (PA09) solution here.
     //
-    return 0.0; // replace (permits template to compile cleanly)
+    return !cars ? 0.0 : cars[0]->speed(track);
 }
 
 
@@ -140,8 +140,8 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname,
     // Delete the next two lines (which keep the unmodified template
     // from crashing).
     //
-    constantColorShaderProgram = NULL;
-    eadsShaderProgram = NULL;
+    // constantColorShaderProgram = NULL;
+    // eadsShaderProgram = NULL;
 
     coordinateAxes = new CoordinateAxes();
 
@@ -149,5 +149,39 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname,
     // Modify your previous (PA08) solution to instance an SkyBox
     // with `extent` and `skyBoxFname` and add it to the scene.
     //
+    Ground* ground = new Ground(32.0);
+    addSceneObject(ground);
+
+    addSceneObject(new SkyBox(32.0, skyBoxFname));
+
+    track = new Track(layout, trackBsplineCvsFname, ground);
+    addSceneObject(track);
+
+    #define N_CAR_COLORS 6
+    const Rgb carColors[N_CAR_COLORS] = {
+        {1.0, 0.0, 0.0},
+        {0.0, 1.0, 0.0},
+        {0.0, 0.0, 1.0},
+        {0.5, 0.5, 0.0},
+        {0.1, 0.1, 0.1},
+        {0.9, 0.9, 0.9}
+    };
+
+    cars = new Car*[nCars];
+    for (int i = 0; i < nCars; i++)
+    {
+        Car* car = new Car(carColors[i % N_CAR_COLORS], (double)i / nCars, track->guideCurve);
+        cars[i] = car;
+        addSceneObject(car);
+    }
+
+    if (layout != LAYOUT_TRIG)
+        addSceneObject(new Teapot());
+
+    camera.setExtent(32.0);
+    camera.setPath(track->guideCurve);
+
+    addLight(new Light(whiteColor, {0.0, 0.0, -1.0})); // Sun
+    addLight(new Light(whiteColor * 0.5, {0.0, 1.0, 0.0})); // Searchlight
 }
 

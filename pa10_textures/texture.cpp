@@ -76,4 +76,27 @@ Texture2D::Texture2D(const Image *image, bool wrap)
 //
 // You'll want to pay special attention to OpenGL man pages here.
 //
+    assert(isPowerOf2(image->width));
+    assert(isPowerOf2(image->height));
+
+    CHECK_GL(glGenTextures(1, &id));
+    CHECK_GL(glBindTexture(GL_TEXTURE_2D, id));
+
+    if (wrap)
+    {
+        CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    }
+    else
+    {
+        CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    }
+
+    CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+
+    CHECK_GL(glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGB8, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->data
+    ));
 }

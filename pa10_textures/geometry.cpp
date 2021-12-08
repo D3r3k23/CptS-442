@@ -17,7 +17,9 @@ Vector3 faceNormal(const Point3 &p0, const Point3 &p1, const Point3 &p2)
     //
     // Copy your previous (PA04) solution here.
     //
-    return Vector3(); // permits template to compile cleanly
+    Vector3 e2 = p2 - p0;
+    Vector3 e1 = p1 - p0;
+    return e1.cross(e2).normalized();
 }
 
 

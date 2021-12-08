@@ -86,7 +86,18 @@ const double Curve::zMax(void) const
     //
     // Copy your previous (PA09) solution here.
     //
-    return 0.0; // replace (permits template to compile cleanly)
+    const int nSteps = 2000;
+    double zMax = std::numeric_limits<double>().min();
+
+    const double step = 1.0 / nSteps;
+    double u = 0.0;
+    for (int i = 0; i < nSteps; i++, u += step)
+    {
+        double z = (*this)(u).g.z;
+        if (z > zMax)
+            zMax = z;
+    }
+    return zMax;
 }
 
 
@@ -161,7 +172,33 @@ const Transform Curve::coordinateFrame(const double u) const
     //
     // Copy your previous (PA09) solution here.
     //
-    return Transform(); // replace (permits template to compile cleanly)
+    Point3 p;
+    Vector3 dp_du, d2p_du2;
+    p = (*this)(u, &dp_du, &d2p_du2);
+
+    Vector3 d_vNeverParallel;
+    if (frameIsDynamic)
+    {
+        double speed = scene->track->speed(u);
+        double ds_du = dp_du.mag();
+        Vector3 c = d2p_du2 * pow((speed / ds_du), 2);
+
+        Vector3 g{0.0, 0.0, -gravAccel};
+        d_vNeverParallel = c - g;
+    }
+    else
+        d_vNeverParallel = vNeverParallel;
+
+    Vector3 vW = dp_du.normalized();
+    Vector3 vU = d_vNeverParallel.cross(vW).normalized();
+    Vector3 vV = vW.cross(vU);
+
+    return {
+        vU.g.x, vV.g.x, vW.g.x, p.g.x,
+        vU.g.y, vV.g.y, vW.g.y, p.g.y,
+        vU.g.z, vV.g.z, vW.g.z, p.g.z,
+        0.0,    0.0,    0.0,    1.0
+    };
 }
 
 
@@ -210,6 +247,20 @@ const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
     //
     // Copy your previous (PA09) solution here.
     //
-    return Point3(); // replace (permits template to compile cleanly)
+    auto calc_dp_du = [this](double u) -> Vector3
+    {
+        return (*this)(u + EPSILON) - (*this)(u - EPSILON);
+    };
+
+    if (dp_du)
+    {
+        *dp_du = calc_dp_du(u);
+    }
+    if (d2p_du2)
+    {
+        *d2p_du2 = calc_dp_du(u + EPSILON) - calc_dp_du(u - EPSILON);
+    }
+    Vec3 angle = 2 * M_PI * (freq * u + phase);
+    return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
 }
 

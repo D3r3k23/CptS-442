@@ -22,6 +22,10 @@ Car::Car(const Rgb &baseRgb_, double initialU, const Curve *path_)
     //
     // Copy your previous (PA08) solution here.
     //
+    irregularMesh = IrregularMesh::read(carFname);
+    path = path_;
+    u = initialU;
+    baseRgb = baseRgb_;
 
     // Since the car's IrregularMesh doesn't need to be tessellated
     // (effectively), we can create the hedgehogs immediately.
@@ -34,6 +38,16 @@ void Car::display(const Transform &viewProjectionTransform,
     //
     // Copy your previous (PA08) setting of `modelTransform` here.
     //
+    if (!path)
+        modelTransform = Transform();
+    else
+    {
+        modelTransform = path->coordinateFrame(u);
+        modelTransform.scale(0.125, 0.125, 0.125);
+        modelTransform.translate(0.0, 0.2, 0.0);
+        modelTransform.rotate(-M_PI / 2, {0.0, 1.0, 0.0});
+        modelTransform.rotate(-M_PI / 2, {1.0, 0.0, 0.0});
+    }
 
     if (scene->eadsShaderProgram) { // will be NULL in the template
         double specFrac = 0.25; // fraction of reflected power that's specular
@@ -75,7 +89,7 @@ const double Car::speed(const Track *track) const
     //
     // Copy your previous (PA09) solution here.
     //
-    return 0.0; // replace (permits template to compile cleanly)
+    return track->speed(u);
 }
 
 

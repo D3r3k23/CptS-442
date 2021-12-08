@@ -1,6 +1,7 @@
 #include <assert.h>
 
 #include "basis.h"
+#include "wrap_cmath_inclusion.h"
 
 const void BezierBasis::operator()(const double u,
     double bs[4], double (*db_dus)[4], double (*d2b_du2s)[4]) const
@@ -11,6 +12,20 @@ const void BezierBasis::operator()(const double u,
     //
     // Copy your previous (PA09) solution here.
     //
+    assert(!d2b_du2s);
+
+    bs[0] = pow(1 - u, 3);
+    bs[1] = 3 * u * pow(1 - u, 2);
+    bs[2] = 3 * pow(u, 2) * (1 - u);
+    bs[3] = pow(u, 3);
+
+    if (db_dus)
+    {
+        (*db_dus)[0] = -3 * pow(1 - u, 2);
+        (*db_dus)[1] =  9 * pow(u, 2) - 12 * u + 3;
+        (*db_dus)[2] =  3 * (2 - 3 * u) * u;
+        (*db_dus)[3] =  3 * pow(u, 2);
+    }
 }
 
 const void UniformCubicBSplineBasis::operator()(
@@ -51,4 +66,11 @@ const void UniformCubicBSplineBasis::operator()(
     //
     // Copy your previous (PA09) solution here.
     //
+    if (d2b_du2s)
+    {
+        (*d2b_du2s)[0] = (-6*u +   6) / 6.0;
+        (*d2b_du2s)[1] = ( 18*u - 12) / 6.0;
+        (*d2b_du2s)[2] = (-18*u +  6) / 6.0;
+        (*d2b_du2s)[3] = ( 6*u      ) / 6.0;
+    }
 }

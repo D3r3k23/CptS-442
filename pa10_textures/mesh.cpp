@@ -11,6 +11,10 @@ void Mesh::allocateBuffers(void)
     //
     // - Call glGenBuffers() to create `textureCoordinatesBufferId`.
     //
+    CHECK_GL(glGenBuffers(1, &vertexPositionsBufferId));
+    CHECK_GL(glGenBuffers(1, &vertexNormalBufferId));
+    CHECK_GL(glGenBuffers(1, &faceNormalBufferId));
+    CHECK_GL(glGenBuffers(1, &textureCoordinatesBufferId));
 }
 
 

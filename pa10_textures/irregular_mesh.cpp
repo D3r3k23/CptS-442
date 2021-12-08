@@ -84,6 +84,37 @@ const void IrregularMesh::render(void)
     //
     // Copy your previous (PA05) solution here.
     //
+    GLint vpai = ShaderProgram::getCurrentAttributeIndex("vertexPosition");
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexPositionsBufferId));
+    CHECK_GL(glEnableVertexAttribArray(vpai));
+    CHECK_GL(glVertexAttribPointer(
+        vpai,
+        3,
+        GL_DOUBLE,
+        GL_FALSE,
+        0,
+        BUFFER_OFFSET(0)
+    ));
+
+    GLint vnai = ShaderProgram::getCurrentAttributeIndex("vertexNormal");
+    if (vnai != NO_SUCH_ATTRIBUTE)
+    {
+        if (controller.useVertexNormals)
+            CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexNormalBufferId));
+        else
+            CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, faceNormalBufferId));
+
+        CHECK_GL(glEnableVertexAttribArray(vnai));
+        CHECK_GL(glVertexAttribPointer(
+            vnai,
+            3,
+            GL_DOUBLE,
+            GL_FALSE,
+            0,
+            BUFFER_OFFSET(0)
+        ));
+    }
+    renderTriangles();
 }
 
 
@@ -92,6 +123,9 @@ const void IrregularMesh::renderTriangles(void) const
     //
     // Copy your previous (PA03) solution here.
     //
+    CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, nVertices));
+    renderStats.ctVertices += nVertices;
+    renderStats.ctTrianglesInIrregularMeshes += nFaces;
 }
 
 
@@ -188,4 +222,30 @@ void IrregularMesh::updateBuffers(void)
     //
     // Copy your previous (PA05) solution here.
     //
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexPositionsBufferId));
+    CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
+        nVertices * sizeof(Point3),
+        vertexPositions,
+        GL_STATIC_DRAW
+    ));
+
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexNormalBufferId));
+    CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
+        nVertices * sizeof(Vector3),
+        vertexNormals,
+        GL_STATIC_DRAW
+    ));
+
+    Vector3* faceNormalOfVertex = new Vector3[nVertices];
+    for (int i = 0; i < nFaces; i++)
+        for (int j = 0; j < 3; j++)
+            faceNormalOfVertex[3 * i + j] = faceNormals[i];
+
+    CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, faceNormalBufferId));
+    CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
+        nVertices * sizeof(Vector3),
+        faceNormalOfVertex,
+        GL_STATIC_DRAW
+    ));
+    delete[] faceNormalOfVertex;
 }
