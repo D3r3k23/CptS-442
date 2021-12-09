@@ -5,7 +5,6 @@
 #include "scene_object.h"
 #include "surface.h"
 
-
 void Surface::draw(SceneObject *sceneObject)
 {
     if (!tessellationMesh) {
@@ -43,10 +42,6 @@ void Surface::tessellate(void)
 
             vertexPositions.push_back(position);
             vertexNormals.push_back(normal);
-
-            // std::cout << "j=" << j << " -> u=" << u << " i=" << i << " -> v=" << v << '\n';
-            // std::cout << "position=" << position << '\n';
-            // std::cout << "normal=" << normal << '\n';
         }
     }
 

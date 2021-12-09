@@ -13,7 +13,7 @@ using namespace std;
 
 static bool isPowerOf2(unsigned int i)
 //
-// returns TRUE iff i is a (positive) power of 2
+// returns TRUE if i is a (positive) power of 2
 //
 {
     if (i == 0)

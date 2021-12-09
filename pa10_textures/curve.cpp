@@ -87,7 +87,7 @@ const double Curve::zMax(void) const
     // Copy your previous (PA09) solution here.
     //
     const int nSteps = 2000;
-    double zMax = std::numeric_limits<double>().min();
+    double zMax = 0.0;
 
     const double step = 1.0 / nSteps;
     double u = 0.0;
@@ -181,7 +181,7 @@ const Transform Curve::coordinateFrame(const double u) const
     {
         double speed = scene->track->speed(u);
         double ds_du = dp_du.mag();
-        Vector3 c = d2p_du2 * pow((speed / ds_du), 2);
+        Vector3 c = d2p_du2 * pow(speed / ds_du, 2);
 
         Vector3 g{0.0, 0.0, -gravAccel};
         d_vNeverParallel = c - g;
@@ -247,9 +247,11 @@ const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
     //
     // Copy your previous (PA09) solution here.
     //
-    auto calc_dp_du = [this](double u) -> Vector3
+    const auto h = EPSILON;
+
+    auto calc_dp_du = [=](double v) -> Vector3
     {
-        return (*this)(u + EPSILON) - (*this)(u - EPSILON);
+        return ((*this)(v + h) - (*this)(v - h)) / (2 * h);
     };
 
     if (dp_du)
@@ -258,7 +260,7 @@ const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
     }
     if (d2p_du2)
     {
-        *d2p_du2 = calc_dp_du(u + EPSILON) - calc_dp_du(u - EPSILON);
+        *d2p_du2 = (calc_dp_du(u + h) - calc_dp_du(u - h)) / (2 * h);
     }
     Vec3 angle = 2 * M_PI * (freq * u + phase);
     return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;

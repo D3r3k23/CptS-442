@@ -104,7 +104,7 @@ vec3 getTexturedRadiance(vec3 worldNormal, vec3 towardsCamera)
 //
 {
     vec3 radiance;
-    vec3 textureRgb
+    vec3 textureRgb;
     if (useTextures)
     {
         textureRgb = texture(imageTexture, interpolatedTextureCoordinates).rgb;
@@ -140,8 +140,6 @@ vec3 getTexturedRadiance(vec3 worldNormal, vec3 towardsCamera)
         radiance += light[i].irradiance * reflectivity;
     }
     return radiance;
-
-    return light[0].irradiance; // replace this with the correct expression
 }
 
 void main(void)

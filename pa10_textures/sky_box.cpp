@@ -9,7 +9,6 @@
 #include "texture.h"
 #include "wall.h"
 
-
 SkyBox::SkyBox(const double extent, const string skyBoxFname)
 {
     texturedShaderProgram = new TexturedShaderProgram();

@@ -122,7 +122,7 @@ void main(void)
         radiance = getRadiance(worldNormal, towardsCamera);
     else
     {
-        interpolatedWorldNormal = towardsCamera;
+        interpolatedWorldNormal = worldNormal;
         interpolatedTowardsCamera = towardsCamera;
     }
 

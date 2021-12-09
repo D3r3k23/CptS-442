@@ -207,9 +207,10 @@ const void RegularMesh::render(void)
 
     if (textureCoordinates)
     {
-        GLint tcai = ShaderProgram::getCurrentAttributeIndex("textureCoordinatesAttributeIndex");
-        if (vnai != NO_SUCH_ATTRIBUTE)
+        GLint tcai = ShaderProgram::getCurrentAttributeIndex("textureCoordinates");
+        if (tcai != NO_SUCH_ATTRIBUTE)
         {
+            std::cout << "Binding texture coordinates" << '\n';
             CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, textureCoordinatesBufferId));
             CHECK_GL(glEnableVertexAttribArray(tcai));
             CHECK_GL(glVertexAttribPointer(
@@ -228,7 +229,6 @@ const void RegularMesh::render(void)
     for (int j = 0; j < nJ - 1 + (int)wrapJ; j++)
         renderTriangleStrip(j);
 }
-
 
 void RegularMesh::setTextureCoordinates(const double uScale,
                                         const double vScale)

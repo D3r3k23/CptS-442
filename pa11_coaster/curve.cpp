@@ -8,8 +8,6 @@
 #include "scene.h"
 #include "wrap_cmath_inclusion.h"
 
-#include <limits>
-
 const double Curve::dS(const double u, const double du) const
 //
 // performs a single step of a Simpson's rule integration of the curve
@@ -97,7 +95,7 @@ const double Curve::zMax(void) const
     // take for reasons like this, but we don't assume it here.)
     //
     const int nSteps = 2000;
-    double zMax = std::numeric_limits<double>().min();
+    double zMax = 0.0;
 
     const double step = 1.0 / nSteps;
     double u = 0.0;
