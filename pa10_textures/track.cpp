@@ -268,11 +268,12 @@ const double Track::speed(double u) const
     //
     // Copy your previous (PA09) solution here
     //
-    double v_top = speedAtTop;
-    double z_top = zMax;
-    double z = (*guideCurve)(u).g.z;
+    const double v_top = speedAtTop;
+    const double z_top = zMax;
+    const double z = (*guideCurve)(u).g.z;
+    const double g = gravAccel;
 
-    double v = sqrt(pow(v_top, 2) + 2 * (z_top - z));
+    const double v = sqrt(pow(v_top, 2) + 2 * g * (z_top - z));
     return v;
 }
 

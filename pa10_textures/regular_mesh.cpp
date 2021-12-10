@@ -210,7 +210,6 @@ const void RegularMesh::render(void)
         GLint tcai = ShaderProgram::getCurrentAttributeIndex("textureCoordinates");
         if (tcai != NO_SUCH_ATTRIBUTE)
         {
-            std::cout << "Binding texture coordinates" << '\n';
             CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, textureCoordinatesBufferId));
             CHECK_GL(glEnableVertexAttribArray(tcai));
             CHECK_GL(glVertexAttribPointer(
