@@ -42,6 +42,7 @@ public:
     CoordinateAxes *coordinateAxes;
     vector<Light *> lights; // (multiple) lights illuminating the scene
     Track *track;
+    Ground* ground;
     static const int nCars = 6; // number of cars on the track
     Car **cars; // array of Car (pointers) to cars for later manipulation
 

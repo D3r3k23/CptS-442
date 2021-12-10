@@ -166,6 +166,17 @@ const Point3 BSplineCurve::operator()(const double u, Vector3 *dp_du,
     return p;
 }
 
+Vector3 Curve::get_centrifugal_accel(double u) const
+{
+    Vector3 dp_du, d2p_du2;
+    (*this)(u, &dp_du, &d2p_du2);
+
+    double speed = scene->track->speed(u);
+    double ds_du = dp_du.mag();
+
+    return d2p_du2 * pow(speed / ds_du, 2);
+}
+
 
 const Transform Curve::coordinateFrame(const double u) const
 {
@@ -173,16 +184,13 @@ const Transform Curve::coordinateFrame(const double u) const
     // Copy your previous (PA09) solution here.
     //
     Point3 p;
-    Vector3 dp_du, d2p_du2;
-    p = (*this)(u, &dp_du, &d2p_du2);
+    Vector3 dp_du;
+    p = (*this)(u, &dp_du);
 
     Vector3 d_vNeverParallel;
     if (frameIsDynamic)
     {
-        double speed = scene->track->speed(u);
-        double ds_du = dp_du.mag();
-        Vector3 c = d2p_du2 * pow(speed / ds_du, 2);
-
+        Vector3 c = get_centrifugal_accel(u);
         Vector3 g{0.0, 0.0, -gravAccel};
         d_vNeverParallel = c - g;
     }

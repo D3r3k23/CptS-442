@@ -39,7 +39,7 @@ const Vec3 Track::freq( 1.00,  2.00, 3.00);
 const Vec3 Track::mag( 0.80,  0.80, 0.20);
 
 // number of supports
-const int Track::nSupports = 15;
+const int Track::nSupports = 40;
 
 // = number of sides for all Tubes used for track
 const int Track::nTheta = 12;
@@ -57,7 +57,7 @@ const double Track::radius = 0.005;
 // separation of the two rails
 const double Track::railSep = 10.0 * radius;
 
-const double Track::speedAtTop = 4.0 // m/s (about 8.8 mph)
+const double Track::speedAtTop = 13.0 // m/s (about 22.4 mph)
         * LENGTH_UNITS_PER_METER; // speed at zMax of curve
 
 
@@ -69,11 +69,13 @@ const struct TagOfLayout tagOfLayout[] = {
 const unsigned int nTagOfLayout = N_ELEM(tagOfLayout);
 
 
-void Track::addSupports(const double maxHeight, const Ground *ground)
+void Track::addSupports(const Ground *ground)
 {
     //
     // Copy your previous (PA09) solution here.
     //
+    const double maxSupportHeight = 2 * mag.g.z + offset.g.z;
+
     const double dSTie = tieSeparation();
     const double dSSupport = supportSeparation();
 
@@ -91,16 +93,44 @@ void Track::addSupports(const double maxHeight, const Ground *ground)
         {
             if (s >= sNextSupport)
             {
-                Point3 point = (*guideCurve)(u);
-                double x = point.g.x;
-                double y = point.g.y;
-                double height = point.g.z;
+                Vector3 c = guideCurve->get_centrifugal_accel(u);
+                Vector3 g = {0.0, 0.0, -gravAccel};
+                Vector3 N = c - g;
+                if (N.g.z > 0.05)
+                {
+                    Point3 point = (*guideCurve)(u);
+                    double x = point.g.x;
+                    double y = point.g.y;
+                    double height = point.g.z;
 
-                auto supportLine = new LineSegment({x, y, ground->height(x, y)}, point, {1.0, 0.0, 0.0});
+                    // const bool aboveTrack = [&]()
+                    // {
+                    //     return false;
+                    //     const int nSteps = 1000;
+                    //     const double step = 1.0 / nSteps;
+                    //     double u2 = 0.0;
+                    //     for (int i = 0; i < nSteps; i++, u2 += step)
+                    //         if (!(u - 0.5 < u2 && u2 < u + 0.5))
+                    //         {
+                    //             Point3 p = (*guideCurve)(u2);
+                    //             if (p.g.z <= height)
+                    //             {
+                    //                 if (x - railSep * 0.1 <= p.g.x && p.g.x <= x + railSep * 0.1)
+                    //                     return true;
+                    //                 if (y - railSep * 0.1 <= p.g.y && p.g.y <= y + railSep * 0.1)
+                    //                     return true;
+                    //             }
+                    //         }
+                    //     return false;
+                    // }();
+                    if (true) // (!aboveTrack)
+                    {
+                        auto supportLine = new LineSegment({x, y, ground->height(x, y)}, point, {1.0, 0.0, 0.0});
 
-                const int nJ = max(2, (int)round(height * 10 / maxHeight));
-                supportTubes.push_back(new Tube(supportLine, radius, nTheta, nJ, false));
-
+                        const int nJ = max(2, (int)round(height * 10 / maxSupportHeight));
+                        supportTubes.push_back(new Tube(supportLine, radius, nTheta, nJ, false));
+                    }
+                }
                 sNextSupport += dSSupport;
             }
             sNextTie += dSTie;
@@ -271,16 +301,16 @@ const double Track::speed(double u) const
     const double v_top = speedAtTop;
     const double z_top = zMax;
     const double z = (*guideCurve)(u).g.z;
-    const double g = gravAccel;
+    const double g = gravAccel * 0.95;
 
     const double v = sqrt(pow(v_top, 2) + 2 * g * (z_top - z));
-    return v;
+    return v * 1.1;
 }
 
 
-Track::Track(const Layout layout, const string trackBsplineCvsFname,
-             const Ground *ground)
- : SceneObject()
+Track::Track(const Layout layout, const string trackBsplineCvsFname, const Ground *ground)
+ : SceneObject(),
+   ground(ground)
 {
     //
     // Copy your previous (PA09) solution here.
@@ -296,9 +326,6 @@ Track::Track(const Layout layout, const string trackBsplineCvsFname,
 
     leftRailTube  = new Tube(leftRailCurve,  radius, nTheta, nRailSegments, true);
     rightRailTube = new Tube(rightRailCurve, radius, nTheta, nRailSegments, true);
-
-    const int maxSupportHeight = 2 * mag.g.z + offset.g.z;
-    addSupports(maxSupportHeight, ground);
 }
 
 

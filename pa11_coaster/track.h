@@ -68,11 +68,10 @@ private:
     static const double railSep;
     // = separation of the two rails
     static const double speedAtTop; // speed at zMax of curve
-
-    void addSupports(const double maxHeight, const Ground *ground);
 public:
     void addTies(void);
-
+    void addSupports(const Ground *ground);
+    
 private:
     void display(const Transform &viewProjectionTransform,
                  Transform worldTransform);
@@ -82,10 +81,10 @@ private:
 
 public:
     Curve *guideCurve;
+    const Ground* ground;
     double zMax; // maximum z value of track
 
-    Track(const Layout layout, const string trackBsplineCvsFname,
-          const Ground *ground);
+    Track(const Layout layout, const string trackBsplineCvsFname, const Ground *ground);
     const double integrationStep(int &nU) const;
     const int numberOfTies(void) const;
     //

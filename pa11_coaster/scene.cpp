@@ -149,7 +149,7 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname,
     // Modify your previous (PA08) solution to instance an SkyBox
     // with `extent` and `skyBoxFname` and add it to the scene.
     //
-    Ground* ground = new Ground(32.0);
+    ground = new Ground(32.0);
     addSceneObject(ground);
 
     addSceneObject(new SkyBox(32.0, skyBoxFname));

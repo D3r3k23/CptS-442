@@ -29,6 +29,7 @@ public:
     // at least one older g++ compiler complains if this is missing
     virtual ~Curve() { };
 
+    Vector3 get_centrifugal_accel(double u) const;
     const Transform coordinateFrame(const double u) const;
 
     const double dS(const double u, const double du) const;

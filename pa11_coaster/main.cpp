@@ -15,7 +15,7 @@ using namespace std;
 #endif
 
 
-#define DEFAULT_SKY_BOX "sky_box_0.rgb"
+#define DEFAULT_SKY_BOX "sky_box_1.rgb"
 
 
 static void help(char *progname)
@@ -100,7 +100,8 @@ int main(int argc, char **argv)
     view.init(&argc, argv, argv[0]);
     controller.init();
     scene = new Scene(layout, trackBsplineCvsFname, skyBoxFname);
-    // hack: addTies() depends on `scene` being defined
+    // hack: addTies() and addSupports() depends on `scene` being defined
     scene->track->addTies();
+    scene->track->addSupports(scene->ground);
     framework.mainLoop();
 }
