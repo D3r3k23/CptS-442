@@ -10,26 +10,7 @@ const void BezierBasis::operator()(const double u,
 // their derivatives.
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // If coaster required the second derivatives of the Bezier basis
-    // (for some unknown reason), this would be the place to also do
-    // the following:
-    //
-    // - Add code to evaluate the *second* derivatives of the 4
-    //   Bernstein polynomials at `u` and put the results in
-    //   (*d2b_du2s)`. (Don't bother if the pointer is NULL.)
-    //
-    // But since coaster does not (and, at this writing, will not)
-    // require them, you don't need to support this. Instead, simply
-    // assert that `d2b_du2s` is NULL so you'll know if you ever need
-    // to add it again should you reuse this code for another
-    // project.
-    //
-    // Again, you would be welcome to look at
-    // `UniformCubicBSplineBasis::operator()` as an example.
-    //
-    // 13 lines in instructor solution (YMMV)
+    // Copy your previous (PA09) solution here.
     //
     assert(!d2b_du2s);
 
@@ -83,14 +64,7 @@ const void UniformCubicBSplineBasis::operator()(
         (*db_dus)[3] = ( 3*u2           ) / 6.0;
     }
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Add code that, iff `d2b_du2s` is not NULL, evaluates the
-    // *second* (linear) derivatives of the 4 cubic B-spline basis
-    // functions at `u` and put the results in `(*d2b_du2s)`.
-    //
-    // Look at the first derivative calculation above as a guideline
-    // for a readable layout of the code.
+    // Copy your previous (PA09) solution here.
     //
     if (d2b_du2s)
     {

@@ -5,7 +5,6 @@
 #include "clock.h"
 #include "controller.h"
 #include "framework.h"
-#include "light.h"
 #include "render_stats.h"
 #include "scene.h"
 #include "view.h"
@@ -27,6 +26,7 @@ enum {
     MENU_TOGGLE_AMBIENT_REFLECTION,
     MENU_TOGGLE_BACK_FACE_CULLING,
     MENU_TOGGLE_DIFFUSE_REFLECTION,
+    MENU_TOGGLE_GOURAUD_SHADING,
     MENU_TOGGLE_POLYGON_FILL,
     MENU_TOGGLE_SPECULAR_REFLECTION,
     MENU_USE_FACE_NORMALS,
@@ -37,6 +37,7 @@ enum {
     MENU_TOGGLE_ANIMATION,
     MENU_TOGGLE_FIRST_PERSON,
     MENU_TOGGLE_PERSPECTIVE,
+    MENU_TOGGLE_TEXTURES,
 };
 
 
@@ -73,6 +74,8 @@ void Controller::init()
                                              MENU_TOGGLE_DIFFUSE_REFLECTION);
     framework.addMenuEntry("toggle [F]ull screen",
                                              MENU_TOGGLE_FULL_SCREEN);
+    framework.addMenuEntry("toggle [G]ouraud/Phong shading",
+                                             MENU_TOGGLE_GOURAUD_SHADING);
     framework.addMenuEntry("toggle view [h]elp",
                                              MENU_TOGGLE_VIEW_HELP);
     framework.addMenuEntry("cycle [L]ight hedgehog",
@@ -87,6 +90,8 @@ void Controller::init()
                                              MENU_TOGGLE_SPECULAR_REFLECTION);
     framework.addMenuEntry("toggle [s]tats",
                                              MENU_TOGGLE_STATS);
+    framework.addMenuEntry("toggle [t]extures",
+                                             MENU_TOGGLE_TEXTURES);
     framework.addMenuEntry("use [f]ace normals",
                                              MENU_USE_FACE_NORMALS);
     framework.addMenuEntry("use [v]ertex normals",
@@ -135,6 +140,10 @@ static void onKeyboardKey(unsigned char key, int, int)
         onMenuSelection(MENU_TOGGLE_FULL_SCREEN);
         break;
 
+    case 'G':
+        onMenuSelection(MENU_TOGGLE_GOURAUD_SHADING);
+        break;
+
     case 'h':
         onMenuSelection(MENU_TOGGLE_VIEW_HELP);
         break;
@@ -174,6 +183,10 @@ static void onKeyboardKey(unsigned char key, int, int)
 
     case 's':
         onMenuSelection(MENU_TOGGLE_STATS);
+        break;
+
+    case 't':
+        onMenuSelection(MENU_TOGGLE_TEXTURES);
         break;
 
     case 'v':
@@ -325,6 +338,13 @@ static void onMenuSelection(int menuDescriptor)
         view.display();
         break;
 
+    case MENU_TOGGLE_GOURAUD_SHADING:
+        controller.useGouraudShading = !controller.useGouraudShading;
+        renderStats.resetTimeAveraging();
+        renderStats.reset();
+        view.display();
+        break;
+
     case MENU_TOGGLE_PERSPECTIVE:
         controller.useOrthographic = !controller.useOrthographic;
         renderStats.resetTimeAveraging();
@@ -349,6 +369,13 @@ static void onMenuSelection(int menuDescriptor)
 
     case MENU_TOGGLE_STATS:
         controller.statsEnabled = !controller.statsEnabled;
+        view.display();
+        break;
+
+    case MENU_TOGGLE_TEXTURES:
+        controller.useTextures = !controller.useTextures;
+        renderStats.resetTimeAveraging();
+        renderStats.reset();
         view.display();
         break;
 

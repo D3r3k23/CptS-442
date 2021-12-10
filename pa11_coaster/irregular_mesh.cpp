@@ -65,6 +65,7 @@ IrregularMesh::IrregularMesh(Point3 *vertexPositions_, Vector3 *vertexNormals_,
     assert(nVertices % 3 == 0); // irregular mesh assumes 3 vertices/face
     nFaces = nVertices / 3;
     assert(nFaces * 3 == nVertices);
+    textureCoordinates = NULL;
 
     createFaceNormalsAndCentroids();
 

@@ -22,6 +22,7 @@ public:
                   Vector3 *vertexNormals_, int nVertices_);
 
     static IrregularMesh *read(const string fname);
+    void setTextureCoordinates(const double uScale, const double vScale);
 
 public:
     const void render(void);

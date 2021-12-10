@@ -10,6 +10,7 @@
 #include "render_stats.h"
 #include "scene.h"
 #include "scene_object.h"
+#include "sky_box.h"
 #include "shader_programs.h"
 #include "teapot.h"
 #include "track.h"
@@ -47,13 +48,7 @@ void Scene::addSceneObject(SceneObject *sceneObject)
 const double Scene::cameraSpeed(void) const
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // If `cars` is NULL (e.g. if it hasn't been defined yet), return
-    // 0.0. Otherwise, return the speed of the camera used for
-    // first-person mode (that of cars[0]).
-    //
-    // 1 line in instructor solution (YMMV)
+    // Copy your previous (PA09) solution here.
     //
     return !cars ? 0.0 : cars[0]->speed(track);
 }
@@ -132,14 +127,15 @@ void Scene::step(double dtReq)
 }
 
 
-Scene::Scene(const Layout layout, const string trackBsplineCvsFname)
+Scene::Scene(const Layout layout, const string trackBsplineCvsFname,
+             const string skyBoxFname)
 {
     constantColorShaderProgram = new ConstantColorShaderProgram(
             "ConstantColorShaderProgram");
     eadsShaderProgram = new EadsShaderProgram();
 
     //
-    // ASSIGNMENT (PA09)
+    // ASSIGNMENT (PA10)
     //
     // Delete the next two lines (which keep the unmodified template
     // from crashing).
@@ -150,10 +146,13 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname)
     coordinateAxes = new CoordinateAxes();
 
     //
-    // Copy your previous (PA08) solution here.
+    // Modify your previous (PA08) solution to instance an SkyBox
+    // with `extent` and `skyBoxFname` and add it to the scene.
     //
     Ground* ground = new Ground(32.0);
     addSceneObject(ground);
+
+    addSceneObject(new SkyBox(32.0, skyBoxFname));
 
     track = new Track(layout, trackBsplineCvsFname, ground);
     addSceneObject(track);

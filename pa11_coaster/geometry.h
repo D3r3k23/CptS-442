@@ -286,7 +286,6 @@ public:
     //
     // Copy your previous (PA04) solution here.
     //
-
     const Vector3 cross(const Vector3 &other) const
     {
         return {

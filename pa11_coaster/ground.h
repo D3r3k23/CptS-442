@@ -15,6 +15,9 @@ class Ground : public SceneObject
 // a SceneObject representing the ground
 //
 {
+private:
+    Texture2D *grassTexture;
+
 public:
     HeightField *heightField;
 

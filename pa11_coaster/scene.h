@@ -45,7 +45,8 @@ public:
     static const int nCars = 6; // number of cars on the track
     Car **cars; // array of Car (pointers) to cars for later manipulation
 
-    Scene(const Layout layout, const string trackBsplineCvsFname);
+    Scene(const Layout layout, const string trackBsplineCvsFname,
+          const string skyBoxFname);
     const double cameraSpeed(void) const;
     void addLight(Light *light);
     void addSceneObject(SceneObject *sceneObject);

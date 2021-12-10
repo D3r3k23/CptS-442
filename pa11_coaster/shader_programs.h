@@ -11,6 +11,7 @@ using namespace std;
 
 #include "color.h"
 #include "transform.h"
+#include "texture.h"
 
 // This macro helps avoid compiler warnings when calling
 // glVertexPointer().
@@ -48,12 +49,15 @@ public:
     static const GLint getCurrentAttributeIndex(const string name);
 
 protected:
+    // When textures are enabled, this is the texture:
+    const Texture2D *imageTexture;
     Matrix4 modelViewProjectionMatrix;
 
     const void select(void) const;
 
     const GLuint compileShader(const string typeName,
                                GLenum shaderType, string glslSource);
+    const void enableTexture(const bool flag) const;
     const void setUniform(const string name, const Matrix4 &matrix, int wh)
         const;
     const void setUniform(const string name, double val) const;
@@ -69,6 +73,10 @@ public:
 
     static const void disableCurrent(void);
     const virtual void start(void) const = 0;
+    void setImageTexture(const Texture2D *imageTexture_)
+    {
+        imageTexture = imageTexture_;
+    }
     void setModelViewProjectionMatrix(
         const Matrix4 &modelViewProjectionMatrix_)
     {
@@ -111,10 +119,19 @@ class EadsShaderProgram : public ShaderProgram
     Rgb maximumSpecularReflectivity;
     double specularExponent;
 
+    // These weights control how much the texture pixels modify the
+    // corresponding EAD components. The specular component is not
+    // textured, since specularity often comes from non-textured
+    // effects like polish.
+    double emittanceTextureWeight;
+    double ambientTextureWeight;
+    double diffuseTextureWeight;
+
 public:
 
     EadsShaderProgram(void);
 
+    const void enableTexture(void) const;
     const void start(void) const;
 
     void setAmbient(const Rgb &ambientReflectivity_)
@@ -139,6 +156,16 @@ public:
         specularExponent = specularExponent_;
     }
 
+    void setTextureWeights(
+        const double emittanceTextureWeight_,
+        const double ambientTextureWeight_,
+        const double diffuseTextureWeight_)
+    {
+        emittanceTextureWeight = emittanceTextureWeight_;
+        ambientTextureWeight = ambientTextureWeight_;
+        diffuseTextureWeight = diffuseTextureWeight_;
+    }
+
     void setNormalMatrix(const Matrix4 &normalMatrix_)
     {
         normalMatrix = normalMatrix_;
@@ -148,6 +175,18 @@ public:
     {
         worldMatrix = worldMatrix_;
     }
+};
+
+
+class TexturedShaderProgram : public ShaderProgram
+//
+// ShaderProgram that gets vertex colors from a texture
+//
+{
+public:
+    TexturedShaderProgram(void);
+
+    const void start(void) const;
 };
 
 

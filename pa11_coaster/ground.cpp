@@ -7,6 +7,7 @@
 #include "n_elem.h"
 #include "scene.h"
 #include "shader_programs.h"
+#include "texture.h"
 #include "transform.h"
 
 
@@ -62,7 +63,12 @@ void Ground::display(const Transform &viewProjectionTransform,
                      Transform worldTransform)
 {
     if (!heightField->tessellationMesh) {
+        // We've moved the updateBuffers() call here so that we can
+        // call setTextureCoordinates() prior to that call.
         heightField->tessellate();
+        heightField->tessellationMesh->setTextureCoordinates(
+            extent_, extent_);
+        heightField->tessellationMesh->updateBuffers();
         addHedgehogs(heightField->tessellationMesh);
     }
 
@@ -81,6 +87,13 @@ void Ground::display(const Transform &viewProjectionTransform,
         scene->eadsShaderProgram->setWorldMatrix(worldTransform);
         scene->eadsShaderProgram->setNormalMatrix(
             worldTransform.getNormalTransform());
+        scene->eadsShaderProgram->setImageTexture(grassTexture);
+        // We use textures for the ground based on the controller
+        // selection.
+        if (controller.useTextures)
+            scene->eadsShaderProgram->setTextureWeights(0.0, 0.2, 0.8);
+        else
+            scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
         scene->eadsShaderProgram->start();
     }
     heightField->tessellationMesh->render();
@@ -98,6 +111,8 @@ Ground::Ground(const double extent)
     int nJ = 101;
     extent_ = extent;
 
+    // Read the texture image and set it for wrapping.
+    grassTexture = new Texture2D(Image::readRgb("grass.rgb"), true);
     heightField = new HeightField(position, nI, nJ);
 }
 

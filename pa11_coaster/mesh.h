@@ -11,6 +11,7 @@
 #include "hedgehog.h"
 #include "poly_line.h"
 #include "tessellation.h"
+#include "texture.h"
 
 
 class Mesh : public Tessellation
@@ -28,9 +29,14 @@ protected:
     Point3 *faceCentroids;   // there are nFaces of these
     Vector3 *vertexNormals;  // there are nVertices of these
     Vector3 *faceNormals;    // there are nFaces of these
+    // We put `textureCoordinates` here in the parent Mesh class, even
+    // though this version of "coaster" only implements them in
+    // RegularMesh.
+    Point2 *textureCoordinates; // there are nVertices of these
     unsigned int vertexPositionsBufferId;
     unsigned int vertexNormalBufferId;
     unsigned int faceNormalBufferId;
+    unsigned int textureCoordinatesBufferId;
 
     static const Point3 triangleCentroid(Point3 p0, Point3 p1, Point3 p2)
     //

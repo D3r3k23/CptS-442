@@ -6,6 +6,8 @@
 // OpenGL shading model.
 //
 
+uniform bool useGouraudShading = true;
+
 // material properties
 uniform vec3 emittance;
 uniform vec3 ambientReflectivity;
@@ -54,19 +56,21 @@ uniform mat3 normalMatrix;    // transforms normals into world
 // per-vertex inputs
 in vec4 vertexPosition;
 in vec3 vertexNormal;
+in vec2 textureCoordinates;
 
 smooth out vec4 interpolatedVertexColor;
+// use only if textures are enabled (this is in the fragment shader)
+smooth out vec2 interpolatedTextureCoordinates;
+
+// use only if Phong shading is enabled (i.e. useGouraudShading is false)
+smooth out vec3 interpolatedWorldNormal;
+smooth out vec3 interpolatedTowardsCamera;
+
 const float EPSILON = 1.0e-5; // for single precision
 
 vec3 getRadiance(vec3 worldNormal, vec3 towardsCamera)
 //
-// ASSIGNMENT (PA09)
-//
-// To see how easy it is to create a function in GLSL, extract the
-// loop in main() that computes the radiance (given `worldNormal` and
-// `towardsCamera`) and make it this separate function which returns
-// the emitted and reflected radiance.  (We'll make use of this
-// function in a surprising way in the next PA.)
+// Copy your previous (PA09) solution here.
 //
 {
     vec3 radiance = emittance;
@@ -106,18 +110,27 @@ void main(void)
         towardsCamera = normalize(cameraPosition - worldPosition.xyz);
 
     //
-    // ASSIGNMENT (PA09)
+    // ASSIGNMENT (PA10)
     //
-    // Replace the code that did the light calculation here with an
-    // expression that makes a single call to getRadiance(). This
-    // should not change the image in any way.
+    // If `useGouraudShading` is true, set `radiance` to the result of
+    // `getRadiance()` as you did for PA09. If it is false, set
+    // `interpolatedWorldNormal` to `worldNormal` and
+    // `interpolatedTowardsCamera` to `towardsCamera`.
     //
-    vec3 radiance = getRadiance(worldNormal, towardsCamera);
+    vec3 radiance;
+    if (useGouraudShading)
+        radiance = getRadiance(worldNormal, towardsCamera);
+    else
+    {
+        interpolatedWorldNormal = worldNormal;
+        interpolatedTowardsCamera = towardsCamera;
+    }
 
     interpolatedVertexColor = vec4(radiance, 1);
 #if 0 // debug
     interpolatedVertexColor = vec4(vertexNormal, 1);
 #endif
+    interpolatedTextureCoordinates = textureCoordinates;
 
     // the position transform is trivial
     gl_Position = modelViewProjectionMatrix * vertexPosition;

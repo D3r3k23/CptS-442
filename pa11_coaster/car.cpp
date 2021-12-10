@@ -65,6 +65,9 @@ void Car::display(const Transform &viewProjectionTransform,
         scene->eadsShaderProgram->setWorldMatrix(worldTransform);
         scene->eadsShaderProgram->setNormalMatrix(
             worldTransform.getNormalTransform());
+        // We never use textures for the car, regardless of the
+        // controller selection.
+        scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
         scene->eadsShaderProgram->start();
     }
 
@@ -84,12 +87,7 @@ void Car::display(const Transform &viewProjectionTransform,
 const double Car::speed(const Track *track) const
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Return the speed of the car at its current position, using
-    // Track::speed().
-    //
-    // 1 line in instructor solution (YMMV)
+    // Copy your previous (PA09) solution here.
     //
     return track->speed(u);
 }

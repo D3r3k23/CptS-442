@@ -15,6 +15,8 @@ using namespace std;
 #endif
 
 
+#define DEFAULT_SKY_BOX "sky_box_0.rgb"
+
 
 static void help(char *progname)
 {
@@ -36,6 +38,9 @@ static void help(char *progname)
     }
     cout << "\n";
     cout <<
+        "  -s <filename>  Use <filename> as a sky box."
+        "                 (default: \"" DEFAULT_SKY_BOX "\")\n";
+    cout <<
         "  -t <filename>  Read the track bspline control vertices"
         " from <filename> (CSV format).\n"
         "                 This implies \"-l bspline\"."
@@ -55,11 +60,12 @@ void _do_not_call_me()
 int main(int argc, char **argv)
 {
     int ch;
+    string skyBoxFname = DEFAULT_SKY_BOX;
     int status;
     Layout layout = LAYOUT_BSPLINE; // the default
     string trackBsplineCvsFname = DEFAULT_TRACK_BSPLINE_CVS_FNAME;
 
-    while ((ch = getopt(argc, argv, "c:hl:t:")) != -1) {
+    while ((ch = getopt(argc, argv, "c:hl:s:t:")) != -1) {
         switch (ch) {
 
         case 'c':
@@ -76,6 +82,10 @@ int main(int argc, char **argv)
             assert(status);
             break;
 
+        case 's':
+            skyBoxFname = optarg;
+            break;
+
         case 't':
             trackBsplineCvsFname = optarg;
             layout = LAYOUT_BSPLINE;
@@ -89,7 +99,7 @@ int main(int argc, char **argv)
 
     view.init(&argc, argv, argv[0]);
     controller.init();
-    scene = new Scene(layout, trackBsplineCvsFname);
+    scene = new Scene(layout, trackBsplineCvsFname, skyBoxFname);
     // hack: addTies() depends on `scene` being defined
     scene->track->addTies();
     framework.mainLoop();

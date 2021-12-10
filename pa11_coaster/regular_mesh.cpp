@@ -17,7 +17,22 @@ void RegularMesh::allocateBuffers(void)
 void RegularMesh::updateBuffers(void)
 {
     //
-    // Copy your previous (PA06) solution here.
+    // ASSIGNMENT (PA10)
+    //
+    // In addition to your previous (PA06) solution, do the following:
+    //
+    // - If `textureCoordinates` is not NULL:
+    //
+    //   * Call glBindBuffer() to bind `textureCoordinatesBufferId` to
+    //     GL_ARRAY_BUFFER, treating `textureCoordinates` similarly
+    //     to what you did with vertex positions and vertex normals.
+    //
+    //   * Call glBufferData() to associate it with
+    //     `textureCoordinates`.
+    //
+    // As before, for maximum efficiency make it GL_STATIC_DRAW.
+    // Remember that glBufferData() always expects buffer sizes in
+    // bytes.
     //
     CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexPositionsBufferId));
     CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
@@ -39,6 +54,16 @@ void RegularMesh::updateBuffers(void)
         vertexNormals,
         GL_STATIC_DRAW
     ));
+
+    if (textureCoordinates)
+    {
+        CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, textureCoordinatesBufferId));
+        CHECK_GL(glBufferData(GL_ARRAY_BUFFER,
+            nVertices * sizeof(Point2),
+            textureCoordinates,
+            GL_STATIC_DRAW
+        ));
+    }
 }
 
 
@@ -127,7 +152,31 @@ void RegularMesh::quadBoundary(int iLeft, int jLower, Point3 p[4])
 const void RegularMesh::render(void)
 {
     //
-    // Copy your previous (PA06) solution here.
+    // ASSIGNMENT (PA10)
+    //
+    // Modify your previous (PA06) solution here as follows:
+    //
+    // - If and only if `textureCoordinates` is not NULL, configure
+    //   and enable texture coordinates. This will be similar to what
+    //   you did to configure the vertex normal buffer (in PA06), with
+    //   these exceptions:
+    //
+    //   * Call glBindBuffer() using `textureCoordinatesBufferId`
+    //     instead of `vertexNormalBufferId`.
+    //
+    //   * Call ShaderProgram::getCurrentAttributeIndex() to get
+    //     `textureCoordinatesAttributeIndex`, the attribute index (i.e.
+    //     "handle") of the "textureCoordinates" attribute in the current
+    //     shader program.
+    //
+    //   * Use `textureCoodinatesAttrbuteIndex` in the
+    //     glEnableVertexAttribArray() and glVertexAttribPointer()
+    //     calls instead of `vnai`. Remember
+    //     that vertex coordinates consist of two double values per
+    //     vertex. As before, be careful here.
+    //
+    //   The logical place to do this is right after you enable the
+    //   vertex normal buffer.
     //
     GLint vpai = ShaderProgram::getCurrentAttributeIndex("vertexPosition");
     CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, vertexPositionsBufferId));
@@ -140,7 +189,6 @@ const void RegularMesh::render(void)
         0,
         BUFFER_OFFSET(0)
     ));
-
 
     GLint vnai = ShaderProgram::getCurrentAttributeIndex("vertexNormal");
     if (vnai != NO_SUCH_ATTRIBUTE)
@@ -157,10 +205,49 @@ const void RegularMesh::render(void)
         ));
     }
 
+    if (textureCoordinates)
+    {
+        GLint tcai = ShaderProgram::getCurrentAttributeIndex("textureCoordinates");
+        if (tcai != NO_SUCH_ATTRIBUTE)
+        {
+            CHECK_GL(glBindBuffer(GL_ARRAY_BUFFER, textureCoordinatesBufferId));
+            CHECK_GL(glEnableVertexAttribArray(tcai));
+            CHECK_GL(glVertexAttribPointer(
+                tcai,
+                2,
+                GL_DOUBLE,
+                GL_FALSE,
+                0,
+                BUFFER_OFFSET(0)
+            ));
+        }
+    }
+
     CHECK_GL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId));
 
     for (int j = 0; j < nJ - 1 + (int)wrapJ; j++)
         renderTriangleStrip(j);
+}
+
+void RegularMesh::setTextureCoordinates(const double uScale,
+                                        const double vScale)
+//
+// Uses the topological (`nI x nJ`) mesh to set the RegularMesh's
+// `textureCoordinates`.
+//
+{
+    int iTextureVertex = 0;
+    textureCoordinates = new Point2[nVertices];
+    double dU = uScale / (nI - 1);
+    double dV = vScale / (nJ - 1);
+    for (int j = 0; j < nJ; j++) {
+        for (int i = 0; i < nI; i++) {
+            textureCoordinates[iTextureVertex].g.x = i * dU;
+            textureCoordinates[iTextureVertex].g.y = j * dV;
+            iTextureVertex++;
+        }
+    }
+    assert(iTextureVertex == nVertices);
 }
 
 
@@ -224,6 +311,7 @@ RegularMesh::RegularMesh(Point3 *vertexPositions_, Vector3 *vertexNormals_,
         vertexPositions[i] = vertexPositions_[i];
         vertexNormals[i] = vertexNormals_[i];
     }
+    textureCoordinates = NULL;
 
     // This enforces our requirement for distinct mesh points and thus
     // prevents later trouble.

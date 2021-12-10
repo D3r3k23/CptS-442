@@ -144,7 +144,8 @@ ShaderProgram::ShaderProgram(string name_)
     : name(name_),
       fragmentShaderId(undefinedShaderId),
       vertexShaderId(undefinedShaderId),
-      programId(undefinedShaderId)
+      programId(undefinedShaderId),
+      imageTexture(NULL)
 //
 // allocates a shader program in the GPU
 //
@@ -284,6 +285,22 @@ const void ShaderProgram::dumpStatus(void) const
     }
 }
 
+
+
+const void ShaderProgram::enableTexture(const bool useTexture) const
+{
+    if (useTexture && imageTexture != NULL) {
+        setUniform("useTextures", true);
+        glActiveTexture(GL_TEXTURE0);
+
+        // Associate `imageTexture`('s id) with texture unit 0 (i.e.
+        // GL_TEXTURE0).
+        glBindTexture(GL_TEXTURE_2D, imageTexture->id);
+        setUniform("imageTexture", 0);
+    } else {
+        setUniform("useTextures", false);
+    }
+}
 
 
 const GLint ShaderProgram::getCurrentAttributeIndex(const string name)
@@ -474,16 +491,24 @@ EadsShaderProgram::EadsShaderProgram(void)
       ambientReflectivity(Rgb(0,0,0)),
       maximumDiffuseReflectivity(Rgb(0,0,0)),
       maximumSpecularReflectivity(Rgb(0,0,0)),
-      specularExponent(1.0) // avoids ambiguity caused if == 0.0
+      specularExponent(1.0), // avoids ambiguity caused if == 0.0
+      emittanceTextureWeight(0.0),
+      ambientTextureWeight(0.0),
+      diffuseTextureWeight(0.0)
 {
     //
-    // Copy your previous (PA05) solution here.
+    // ASSIGNMENT (PA10)
+    //
+    // Modify your previous (PA05) solution as follows:
+    //
+    // - Read the fragment shader code from "eads_fragment_shader.glsl"
+    //   instead of "passthru_fragment_shader.glsl".
     //
     char* vertexShaderText = readFile("eads_vertex_shader.glsl");
     compileVertexShader(vertexShaderText);
     free(vertexShaderText);
 
-    char* fragmentShaderText = readFile("passthru_fragment_shader.glsl");
+    char* fragmentShaderText = readFile("eads_fragment_shader.glsl");
     compileFragmentShader(fragmentShaderText);
     free(fragmentShaderText);
 }
@@ -492,6 +517,9 @@ EadsShaderProgram::EadsShaderProgram(void)
 const void EadsShaderProgram::start(void) const
 {
     select();
+
+    // switch between Gouraud and Phong shading
+    setUniform("useGouraudShading", controller.useGouraudShading);
 
     // set camera properties
     setUniform("useOrthographic", controller.useOrthographic);
@@ -525,6 +553,8 @@ const void EadsShaderProgram::start(void) const
         setUniform("specularExponent", 1.0); // avoid pow(0.0, 0.0) ambiguity
     }
 
+    enableTexture();
+
     // set light properties
 
     //
@@ -550,6 +580,53 @@ const void EadsShaderProgram::start(void) const
             setUniform(towardsUniformName, Vector3{0, 0, 0});
         }
     }
+}
+
+
+const void EadsShaderProgram::enableTexture(void) const
+{
+    bool useTexture =
+           emittanceTextureWeight != 0.0
+        || ambientTextureWeight   != 0.0
+        || diffuseTextureWeight   != 0.0;
+
+    // Set the generic texture-related stuff.
+    ShaderProgram::enableTexture(useTexture);
+
+    // Set the texture-related attributes of this shader program.
+    if (useTexture && imageTexture != NULL) {
+        // Set the weights that control how much of the texture is
+        // applied to each surface component.
+        setUniform("emittanceTextureWeight", emittanceTextureWeight);
+        setUniform("ambientTextureWeight", ambientTextureWeight);
+        setUniform("diffuseTextureWeight", diffuseTextureWeight);
+    }
+}
+
+
+TexturedShaderProgram::TexturedShaderProgram(void)
+    : ShaderProgram("TexturedShaderProgram")
+{
+    char *fileContents;
+
+    fileContents = readFile("textured_vertex_shader.glsl");
+    compileVertexShader(fileContents);
+    free(fileContents);
+
+    fileContents = readFile("textured_fragment_shader.glsl");
+    compileFragmentShader(fileContents);
+    free(fileContents);
+}
+
+
+const void TexturedShaderProgram::start(void) const
+{
+    select();
+
+    // set transform matrices
+    setUniform("modelViewProjectionMatrix", modelViewProjectionMatrix, 4);
+
+    enableTexture(controller.useTextures);
 }
 
 

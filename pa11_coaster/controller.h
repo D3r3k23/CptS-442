@@ -28,7 +28,9 @@ public:
     bool specularReflectionEnabled;
     bool statsEnabled;
     bool useFirstPerson;
+    bool useGouraudShading;
     bool useOrthographic;
+    bool useTextures;
     // true -> vertex normals, false -> face normals (This only
     // applies to irregular meshes. Regular meshes always use vertex
     // normals.)
@@ -43,7 +45,7 @@ Controller()
     ambientReflectionEnabled(true),
     animationEnabled(false),
     axesEnabled(false),
-    backFaceCullingEnabled(false),
+    backFaceCullingEnabled(true),
     diffuseReflectionEnabled(true),
     fillPolygons(true),
     fullScreenEnabled(false),
@@ -52,7 +54,9 @@ Controller()
     specularReflectionEnabled(true),
     statsEnabled(false),
     useFirstPerson(false),
+    useGouraudShading(false),
     useOrthographic(true),
+    useTextures(true),
     useVertexNormals(false),
     viewHelpEnabled(false),
     // keep this at the end so previous initializations can end with commas

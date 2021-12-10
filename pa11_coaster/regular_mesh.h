@@ -49,6 +49,7 @@ public:
         int nI, int nJ, bool wrapI, bool wrapJ);
 
     const void render(void);
+    void setTextureCoordinates(const double uScale, const double vScale);
     void updateBuffers(void);
 
 private:

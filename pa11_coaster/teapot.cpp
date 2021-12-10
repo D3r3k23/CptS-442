@@ -21,6 +21,9 @@ void Teapot::display(const Transform &viewProjectionTransform,
         scene->eadsShaderProgram->setWorldMatrix(worldTransform);
         scene->eadsShaderProgram->setNormalMatrix(
             worldTransform.getNormalTransform());
+        // We never use textures for the teapot, regardless of the
+        // controller selection.
+        scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
         scene->eadsShaderProgram->start();
     }
 

@@ -12,7 +12,6 @@ using namespace std;
 #include "track.h"
 #include "tube.h"
 
-#include "wrap_cmath_inclusion.h"
 
 //
 //  track design parameters
@@ -73,26 +72,7 @@ const unsigned int nTagOfLayout = N_ELEM(tagOfLayout);
 void Track::addSupports(const double maxHeight, const Ground *ground)
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Make a similar change to this method that you made to
-    // `addTies()` (which you should do first) with these additional
-    // modifications.
-    //
-    // - Maintain an `sNextSupport` as the value of `s` for the next
-    //   support, just like `sNextTie`.
-    //
-    // - Call `supportSeparation()` to determine `dSSupport`, the
-    //   distance between each support.
-    //
-    // - Make sure that each support always coincides with a tie.
-    //
-    // The recommended way to do this is to follow the same
-    // integration steps as `addTies()`, but additionally keep track
-    // of supports using `sNextSupport` and `dSSupport` as you did
-    // `sNextTie` and `dSTie`. Whenever you would draw a tie in
-    // `addTies()` don't do that, but test to see if it's time to draw
-    // a support and, if so, do what you did in PA06.
+    // Copy your previous (PA09) solution here.
     //
     const double dSTie = tieSeparation();
     const double dSSupport = supportSeparation();
@@ -133,35 +113,7 @@ void Track::addSupports(const double maxHeight, const Ground *ground)
 void Track::addTies()
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Replace your previous solution (PA06) with the following:
-    //
-    // - Call tieSeparation() to determine the distance `dSTie`, the
-    //   distance between each tie.
-    //
-    // - Call integrationStep() to determine `dU` and `nU`, the
-    //   parameter step size between this frame and the next and the
-    //   number of integration steps along the curve, respectively.
-    //
-    // - Initialize `s`, the length along the curve to 0.0.
-    //
-    // - Initialize a variable `sNextTie`, the value of `s` to put the
-    //   next tie at, to 0.0.
-    //
-    // - For each integration step `i` from 0 to `nU - 1`, inclusive:
-    //
-    //   * Set `u` to `i * dU` the parametric value.
-    //
-    //   * If `s >= sNextTie`,
-    //
-    //     + Add a Tie as you did in PA06. (Note that `leftRailCurve`
-    //       and `rightRailCurve` are now Track attributes, so replace
-    //       the `leftCurve` and `rightCurve` parameters with them.)
-    //
-    //     + Increment `sNextTie` by `dSTie`.
-    //
-    //   * Increment `s` by `guideCurve->dS(u, dU)`.
+    // Copy your previous (PA09) solution here.
     //
     const double dSTie = tieSeparation();
 
@@ -207,6 +159,9 @@ void Track::display(const Transform &viewProjectionTransform,
     scene->eadsShaderProgram->setDiffuse(0.4 * redRgb);
     scene->eadsShaderProgram->setAmbient(0.4 * redRgb);
     scene->eadsShaderProgram->setSpecular(0.4 * whiteRgb, 40.0);
+    // We never use textures for the supports, regardless of the
+    // controller selection.
+    scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
     scene->eadsShaderProgram->start();
 
     // draw supports
@@ -218,6 +173,9 @@ void Track::display(const Transform &viewProjectionTransform,
     scene->eadsShaderProgram->setDiffuse(0.4 * redRgb);
     scene->eadsShaderProgram->setAmbient(0.4 * redRgb);
     scene->eadsShaderProgram->setSpecular(0.4 * whiteRgb, 40.0);
+    // We never use textures for the ties, regardless of the
+    // controller selection.
+    scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
     scene->eadsShaderProgram->start();
 
     // draw ties
@@ -248,6 +206,9 @@ void Track::display(const Transform &viewProjectionTransform,
     scene->eadsShaderProgram->setDiffuse(kDiffuse);
     scene->eadsShaderProgram->setAmbient(kAmbient);
     scene->eadsShaderProgram->setSpecular(kSpecular, expoSpecular);
+    // We never use textures for the rails, regardless of the
+    // controller selection.
+    scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
     scene->eadsShaderProgram->start();
 
     // draw rail(s)
@@ -305,20 +266,14 @@ void Track::setGuideCurve(const Layout layout,
 const double Track::speed(double u) const
 {
     //
-    // ASSIGNMENT (PA09)
+    // Copy your previous (PA09) solution here
     //
-    // Assuming energy conservation, return the speed of a car (or
-    // anything riding on the track) at position `u` along the track.
-    // Remember that `speedAtTop` is its speed when it's `z`
-    // coordinate is at `zMax`.
-    //
-    // There's a global `gravAccel` that's g (the gravitational
-    // acceleration at the Earth's surface) in NDC units.
-    //
-    double v_top = speedAtTop;
-    double z_top = zMax;
-    double z = (*guideCurve)(u).g.z;
-    double v = sqrt(pow(v_top, 2) + 2 * (z_top - z));
+    const double v_top = speedAtTop;
+    const double z_top = zMax;
+    const double z = (*guideCurve)(u).g.z;
+    const double g = gravAccel;
+
+    const double v = sqrt(pow(v_top, 2) + 2 * g * (z_top - z));
     return v;
 }
 
@@ -328,22 +283,7 @@ Track::Track(const Layout layout, const string trackBsplineCvsFname,
  : SceneObject()
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Modify your PA07 solution to do the following:
-    //
-    // - Set zMax to be the maximum z value for the guide curve.
-    //
-    // - Enable the guide curve to use a dynamic (banked) coordinate
-    //   frame.
-    //
-    // - Make the left and right rail curves you instance in the
-    //   constructor attributes `leftRailCurve` and `rightRailCurve`.
-    //   Be sure they're attributes, not local variables.
-    //
-    // - Remove the call to addTies(), as it will now be done *after*
-    //   the Scene has been instanced (a hack to be corrected later).
-    //   Long story.
+    // Copy your previous (PA09) solution here.
     //
     setGuideCurve(layout, trackBsplineCvsFname);
     guideCurve->enableDynamicFrame();

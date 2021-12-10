@@ -8,6 +8,7 @@
 #include "scene.h"
 #include "wrap_cmath_inclusion.h"
 
+
 const double Curve::dS(const double u, const double du) const
 //
 // performs a single step of a Simpson's rule integration of the curve
@@ -83,16 +84,7 @@ const double Curve::zMax(void) const
 //
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Move along the parametric curve looking for the maximum z
-    // value, which you return. Choose at least 1000 steps, but don't
-    // overdo it.
-    //
-    // (A cleverer, faster, and more reliable way would be to look for
-    // extrema of the z component, but this would require skills in
-    // numerical analysis, a good elective for computer graphicists to
-    // take for reasons like this, but we don't assume it here.)
+    // Copy your previous (PA09) solution here.
     //
     const int nSteps = 2000;
     double zMax = 0.0;
@@ -178,35 +170,7 @@ const Point3 BSplineCurve::operator()(const double u, Vector3 *dp_du,
 const Transform Curve::coordinateFrame(const double u) const
 {
     //
-    // ASSIGNMENT (PA09)
-    //
-    // Modify your previous (PA08) solution as follows:
-    //
-    // - If the curve is dynamic (`frameIsDynamic`), compute a local
-    //   `vNeverParallel` which is a vector `c - g`, where
-    //
-    //   + `g` is the acceleration due to gravity
-    //
-    //     a vector in the -z direction with a magnitude of `gravAccel`
-    //
-    //   + `c` is the centripetal acceleration, which is
-    //
-    //       d2p_du2 * (speed / ds_du)**2
-    //
-    //     where:
-    //
-    //       * `d2p_du2` the second path derivative (a vector) is
-    //         given by the curve (via *this()).
-    //
-    //       * `speed` is given by `scene->track->speed(u)`
-    //
-    //       * `ds_du` is the magnitude of `dp_du`, which is also
-    //          provided by the curve.
-    //
-    // - If the curve is not dynamic, continue to use the given
-    //   `vNeverParallel`.
-    //
-    // 25 lines in instructor solution (YMMV)
+    // Copy your previous (PA09) solution here.
     //
     Point3 p;
     Vector3 dp_du, d2p_du2;
@@ -217,7 +181,7 @@ const Transform Curve::coordinateFrame(const double u) const
     {
         double speed = scene->track->speed(u);
         double ds_du = dp_du.mag();
-        Vector3 c = d2p_du2 * pow((speed / ds_du), 2);
+        Vector3 c = d2p_du2 * pow(speed / ds_du, 2);
 
         Vector3 g{0.0, 0.0, -gravAccel};
         d_vNeverParallel = c - g;
@@ -262,6 +226,7 @@ const Point3 OffsetCurve::operator()(const double u,
     return transform * (Point3(0,0,0) + offset);
 }
 
+
 const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
     Vector3 *d2p_du2) const
 //
@@ -280,17 +245,13 @@ const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
 //
 {
     //
-    // ASSIGNMENT (PA09)
+    // Copy your previous (PA09) solution here.
     //
-    // Enhance your previous (PA06) solution to set `*d2p_du2` to the
-    // (second) path derivative as per the function header. Use your
-    // knowledge of calculus to compute it.
-    //
-    // 15 lines in instructor solution (YMMV)
-    //
-    auto calc_dp_du = [this](double u) -> Vector3
+    const auto h = EPSILON;
+
+    auto calc_dp_du = [=](double v) -> Vector3
     {
-        return (*this)(u + EPSILON) - (*this)(u - EPSILON);
+        return ((*this)(v + h) - (*this)(v - h)) / (2 * h);
     };
 
     if (dp_du)
@@ -299,7 +260,7 @@ const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
     }
     if (d2p_du2)
     {
-        *d2p_du2 = calc_dp_du(u + EPSILON) - calc_dp_du(u - EPSILON);
+        *d2p_du2 = (calc_dp_du(u + h) - calc_dp_du(u - h)) / (2 * h);
     }
     Vec3 angle = 2 * M_PI * (freq * u + phase);
     return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
