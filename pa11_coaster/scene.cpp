@@ -181,7 +181,9 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname,
     camera.setExtent(32.0);
     camera.setPath(track->guideCurve);
 
-    addLight(new Light(whiteColor, {0.0, 0.0, -1.0})); // Sun
-    addLight(new Light(whiteColor * 0.5, {0.0, 1.0, 0.0})); // Searchlight
+    addLight(new Light(whiteColor * 0.4, {0.0, 0.0, -1.0}));
+
+    addLight(new Light({0.6, 0.4, 0.7}, {0.0, 0.8, 0.0}));
+    addLight(new Light({0.6, 0.4, 0.7}, {0.8, 0.0, 0.0}));
 }
 

@@ -274,3 +274,21 @@ const Point3 TrigonometricCurve::operator()(const double u, Vector3 *dp_du,
     return Point3(cos(angle.g.x), cos(angle.g.y), cos(angle.g.z)) * mag + offset;
 }
 
+const Point3 CircleCurve::operator()(const double u, Vector3* dp_du, Vector3* d2p_du2) const
+{
+    assert(!d2p_du2);
+
+    Vector3 vU = Vector3{0.0, 0.0, 1.0}.cross(vNeverParallel); // vParallel can't be vertical
+    Vector3 vV = vU.cross(vNeverParallel);
+
+    const double theta = 2 * M_PI * u;
+    Point3 point = center + radius * (vU.normalized() * cos(theta) + vV.normalized() * sin(theta));
+
+    if (dp_du)
+    {
+        auto h = EPSILON;
+        *dp_du = (*this)(u + h) - (*this)(u - h);
+    }
+    return point;
+}
+

@@ -170,6 +170,48 @@ void Track::addTies()
     }
 }
 
+void Track::addRings(void)
+{
+    static const int NUM_RINGS = 6;
+
+    const double dSRing = supportSeparation();
+
+    int nU;
+    double dU = integrationStep(nU);
+
+    double s = 0.0;
+    double sNextRing = supportSeparation() * 0.5;
+
+    for (int i = 0; i < nU; i++)
+    {
+        double u = i * dU;
+        if (s >= sNextRing)
+        {
+            Point3 p;
+            Vector3 dp_du;
+
+            p = (*guideCurve)(1.0 - u, &dp_du);
+            add_ring(p, dp_du);
+
+            p = (*guideCurve)(u, &dp_du);
+            add_ring(p, dp_du);
+            
+            if (ringTubes.size() >= NUM_RINGS)
+                break;
+            else
+                sNextRing += dSRing;
+        }
+        s += guideCurve->dS(u, dU);
+    }
+}
+
+void Track::add_ring(const Point3& point, const Vector3& vPerpendicular)
+{
+    static const double RING_RADIUS = 0.3;
+
+    auto ringLine = new CircleCurve(point, RING_RADIUS, vPerpendicular);
+    ringTubes.push_back(new Tube(ringLine, radius, nTheta, 4, true));
+}
 
 void Track::display(const Transform &viewProjectionTransform,
                     Transform worldTransform)
@@ -244,6 +286,20 @@ void Track::display(const Transform &viewProjectionTransform,
     // draw rail(s)
     leftRailTube->draw(this);
     rightRailTube->draw(this);
+
+    // set ring attributes
+    scene->eadsShaderProgram->setEmittance(blackColor);
+    scene->eadsShaderProgram->setDiffuse(0.4 * redRgb);
+    scene->eadsShaderProgram->setAmbient(0.4 * redRgb);
+    scene->eadsShaderProgram->setSpecular(0.4 * whiteRgb, 40.0);
+    // We never use textures for the rings, regardless of the
+    // controller selection.
+    scene->eadsShaderProgram->setTextureWeights(0.0, 0.0, 0.0);
+    scene->eadsShaderProgram->start();
+
+    // draw rings
+    for (auto ring : ringTubes)
+        ring->draw(this);
 
     // draw hedgehogs
 
@@ -326,6 +382,8 @@ Track::Track(const Layout layout, const string trackBsplineCvsFname, const Groun
 
     leftRailTube  = new Tube(leftRailCurve,  radius, nTheta, nRailSegments, true);
     rightRailTube = new Tube(rightRailCurve, radius, nTheta, nRailSegments, true);
+
+    addRings();
 }
 
 

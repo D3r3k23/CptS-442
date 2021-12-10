@@ -150,5 +150,23 @@ public:
                             Vector3 *d2p_du2 = NULL) const;
 };
 
+class CircleCurve : public Curve
+{
+public:
+    CircleCurve(const Point3 center, double radius, const Vector3& vPerpendicular)
+      : center(center),
+        radius(radius)
+    {
+        vNeverParallel = vPerpendicular;
+        frameIsDynamic = false;
+    }
+
+    const Point3 operator()(const double u, Vector3* dp_du=NULL, Vector3* d2p_du2=NULL) const;
+
+private:
+    Point3 center;
+    double radius;
+};
+
 #define INCLUDED_CURVE
 #endif // INCLUDED_CURVE

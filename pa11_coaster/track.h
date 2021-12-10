@@ -42,6 +42,7 @@ private:
     Tube *rightRailTube;
     vector<Tube *> supportTubes;
     vector<Tube *> tieTubes;
+    vector<Tube *> ringTubes;
 
     // track design parameters
 
@@ -71,7 +72,10 @@ private:
 public:
     void addTies(void);
     void addSupports(const Ground *ground);
-    
+    void addRings(void);
+
+    void add_ring(const Point3& point, const Vector3& vPerpendicular);
+
 private:
     void display(const Transform &viewProjectionTransform,
                  Transform worldTransform);
