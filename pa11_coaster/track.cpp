@@ -172,7 +172,7 @@ void Track::addTies()
 
 void Track::addRings(void)
 {
-    static const int NUM_RINGS = 6;
+    static const int NUM_RINGS = 9;
 
     const double dSRing = supportSeparation();
 
@@ -190,8 +190,8 @@ void Track::addRings(void)
             Point3 p;
             Vector3 dp_du;
 
-            p = (*guideCurve)(1.0 - u, &dp_du);
-            add_ring(p, dp_du);
+            // p = (*guideCurve)(1.0 - u, &dp_du);
+            // add_ring(p, dp_du);
 
             p = (*guideCurve)(u, &dp_du);
             add_ring(p, dp_du);
@@ -207,10 +207,12 @@ void Track::addRings(void)
 
 void Track::add_ring(const Point3& point, const Vector3& vPerpendicular)
 {
-    static const double RING_RADIUS = 0.3;
+    static const double RING_RADIUS = 0.15;
+    static const double RING_OFFSET = 0.05;
 
+    Point3 ringCenter{point.g.x, point.g.y, point.g.z + RING_OFFSET};
     auto ringLine = new CircleCurve(point, RING_RADIUS, vPerpendicular);
-    ringTubes.push_back(new Tube(ringLine, radius, nTheta, 4, true));
+    ringTubes.push_back(new Tube(ringLine, radius, nTheta, 50, true));
 }
 
 void Track::display(const Transform &viewProjectionTransform,
