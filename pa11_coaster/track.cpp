@@ -74,8 +74,6 @@ void Track::addSupports(const Ground *ground)
     //
     // Copy your previous (PA09) solution here.
     //
-    const double maxSupportHeight = 2 * mag.g.z + offset.g.z;
-
     const double dSTie = tieSeparation();
     const double dSSupport = supportSeparation();
 
@@ -99,37 +97,7 @@ void Track::addSupports(const Ground *ground)
                 if (N.g.z > 0.05)
                 {
                     Point3 point = (*guideCurve)(u);
-                    double x = point.g.x;
-                    double y = point.g.y;
-                    double height = point.g.z;
-
-                    // const bool aboveTrack = [&]()
-                    // {
-                    //     return false;
-                    //     const int nSteps = 1000;
-                    //     const double step = 1.0 / nSteps;
-                    //     double u2 = 0.0;
-                    //     for (int i = 0; i < nSteps; i++, u2 += step)
-                    //         if (!(u - 0.5 < u2 && u2 < u + 0.5))
-                    //         {
-                    //             Point3 p = (*guideCurve)(u2);
-                    //             if (p.g.z <= height)
-                    //             {
-                    //                 if (x - railSep * 0.1 <= p.g.x && p.g.x <= x + railSep * 0.1)
-                    //                     return true;
-                    //                 if (y - railSep * 0.1 <= p.g.y && p.g.y <= y + railSep * 0.1)
-                    //                     return true;
-                    //             }
-                    //         }
-                    //     return false;
-                    // }();
-                    if (true) // (!aboveTrack)
-                    {
-                        auto supportLine = new LineSegment({x, y, ground->height(x, y)}, point, {1.0, 0.0, 0.0});
-
-                        const int nJ = max(2, (int)round(height * 10 / maxSupportHeight));
-                        supportTubes.push_back(new Tube(supportLine, radius, nTheta, nJ, false));
-                    }
+                    add_support_tube(point);
                 }
                 sNextSupport += dSSupport;
             }
@@ -137,6 +105,7 @@ void Track::addSupports(const Ground *ground)
         }
         s += guideCurve->dS(u, dU);
     }
+    add_ring_supports();
 }
 
 
@@ -213,6 +182,53 @@ void Track::add_ring(const Point3& point, const Vector3& vPerpendicular)
     Point3 ringCenter{point.g.x, point.g.y, point.g.z + RING_OFFSET};
     auto ringLine = new CircleCurve(point, RING_RADIUS, vPerpendicular);
     ringTubes.push_back(new Tube(ringLine, radius, nTheta, 50, true));
+}
+
+void Track::add_ring_supports(void)
+{
+    for (auto ring : ringTubes)
+    {
+        const CircleCurve* ringCurve = static_cast<const CircleCurve*>(ring->get_curve());
+        const Point3 ringBottom = (*ringCurve)(0.25);
+        add_support_tube(ringBottom);
+    }
+}
+
+void Track::add_support_tube(const Point3& point)
+{
+    const double maxSupportHeight = 2 * mag.g.z + offset.g.z;
+
+    double x = point.g.x;
+    double y = point.g.y;
+    double height = point.g.z;
+
+    // const bool aboveTrack = [&]()
+    // {
+    //     return false;
+    //     const int nSteps = 1000;
+    //     const double step = 1.0 / nSteps;
+    //     double u2 = 0.0;
+    //     for (int i = 0; i < nSteps; i++, u2 += step)
+    //         if (!(u - 0.5 < u2 && u2 < u + 0.5))
+    //         {
+    //             Point3 p = (*guideCurve)(u2);
+    //             if (p.g.z <= height)
+    //             {
+    //                 if (x - railSep * 0.1 <= p.g.x && p.g.x <= x + railSep * 0.1)
+    //                     return true;
+    //                 if (y - railSep * 0.1 <= p.g.y && p.g.y <= y + railSep * 0.1)
+    //                     return true;
+    //             }
+    //         }
+    //     return false;
+    // }();
+    if (true) // (!aboveTrack)
+    {
+        auto supportLine = new LineSegment({x, y, ground->height(x, y)}, point, {1.0, 0.0, 0.0});
+
+        const int nJ = max(2, (int)round(height * 10 / maxSupportHeight));
+        supportTubes.push_back(new Tube(supportLine, radius, nTheta, nJ, false));
+    }
 }
 
 void Track::display(const Transform &viewProjectionTransform,
@@ -384,8 +400,6 @@ Track::Track(const Layout layout, const string trackBsplineCvsFname, const Groun
 
     leftRailTube  = new Tube(leftRailCurve,  radius, nTheta, nRailSegments, true);
     rightRailTube = new Tube(rightRailCurve, radius, nTheta, nRailSegments, true);
-
-    addRings();
 }
 
 

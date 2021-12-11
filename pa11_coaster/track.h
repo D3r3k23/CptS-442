@@ -74,9 +74,11 @@ public:
     void addSupports(const Ground *ground);
     void addRings(void);
 
-    void add_ring(const Point3& point, const Vector3& vPerpendicular);
-
 private:
+    void add_ring(const Point3& point, const Vector3& vPerpendicular);
+    void add_ring_supports(void);
+    void add_support_tube(const Point3& point);
+
     void display(const Transform &viewProjectionTransform,
                  Transform worldTransform);
 

@@ -102,6 +102,7 @@ int main(int argc, char **argv)
     scene = new Scene(layout, trackBsplineCvsFname, skyBoxFname);
     // hack: addTies() and addSupports() depends on `scene` being defined
     scene->track->addTies();
+    scene->track->addRings();
     scene->track->addSupports(scene->ground);
     framework.mainLoop();
 }

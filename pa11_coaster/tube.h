@@ -26,6 +26,11 @@ Tube(Curve *curve_, double radius_, int nI_, int nJ_, bool isClosed_)
 
     const Point3 operator()(const double u, const double v,
                                     Vector3 &dp_du, Vector3 &dp_dv) const;
+                                
+    const Curve* get_curve(void) const
+    {
+        return curve;
+    }
 };
 
 #define INCLUDED_TUBE

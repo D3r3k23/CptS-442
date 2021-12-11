@@ -13,6 +13,7 @@
 #include "sky_box.h"
 #include "shader_programs.h"
 #include "teapot.h"
+#include "tie_fighter.h"
 #include "track.h"
 #include "transform.h"
 #include "tube.h"
@@ -176,7 +177,10 @@ Scene::Scene(const Layout layout, const string trackBsplineCvsFname,
     }
 
     if (layout != LAYOUT_TRIG)
+    {
         addSceneObject(new Teapot());
+        // addSceneObject(new TieFighter()); // Wasn't able to get this to work
+    }
 
     camera.setExtent(32.0);
     camera.setPath(track->guideCurve);
