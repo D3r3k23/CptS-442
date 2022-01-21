@@ -1,4 +1,4 @@
-# WSU CptS 442: Computer Graphics Assignments
+Computer Graphics Assignments
 
 Each of the projects throughout the semester built up to the final result, and in the last assignment I added custom features.
 
